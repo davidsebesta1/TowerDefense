@@ -8,7 +8,6 @@ public class TurnPointScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("touched");
         if (other.gameObject.CompareTag("Enemy"))
         {
             other.gameObject.transform.Rotate(rotation);
