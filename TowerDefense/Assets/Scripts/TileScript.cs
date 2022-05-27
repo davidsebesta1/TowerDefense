@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,48 +6,73 @@ using UnityEngine;
 public class TileScript : MonoBehaviour
 {
     [SerializeField] private GameObject[] towerTemplates;
+    [SerializeField] private GameObject[] towerObjects;
 
     private GameObject playerCamera;
 
     private bool isClickedOn = false;
+    private bool buildMode = false;
+    private bool isOccupied = false;
 
     private void Start()
     {
         playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
     }
 
-    public void ShowBlueprint(int towerID)
+    private void ShowBlueprint(int towerID)
     {
-        if (isClickedOn)
+        if (isClickedOn && buildMode && towerID != 0)
         {
+            towerID--;
             Debug.Log(towerID);
-            Instantiate(towerTemplates[towerID], transform.position + new Vector3(0, 1, 0), towerTemplates[towerID].transform.rotation);
+            Instantiate(towerTemplates[towerID], transform.position + new Vector3(0, 0.1f, 0), towerTemplates[towerID].transform.rotation);
         }
     }
 
-    public void HideBlueprint()
+    private void HideBlueprint()
     {
         Destroy(GameObject.FindGameObjectWithTag("Blueprint"));
     }
 
-    private void OnMouseOver()
+    public void BuildTower(int id)
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if(buildMode && !isOccupied)
         {
-            isClickedOn = true;
-            playerCamera.GetComponent<PlayerController>().setSelectedTile(this.gameObject); ;
-            ShowBlueprint(0);
+            id--;
+            isOccupied = true;
+            Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
+            HideBlueprint();
+        }
+    }
+
+    private void OnMouseEnter()
+    {
+        isClickedOn = true;
+        PlayerController playerController = playerCamera.GetComponent<PlayerController>();
+        buildMode = playerController.getBuildMode();
+
+        if (playerController.getSelectedTile() != null)
+        {
+            playerController.getSelectedTile().gameObject.GetComponent<TileScript>().HideBlueprint();
         }
 
+        playerController.setSelectedTile(this.gameObject);
 
-        //fix this pls
-        if (playerCamera.GetComponent<PlayerController>().getSelectedTile() != null)
+        if (!isOccupied)
         {
-            if (this.gameObject != playerCamera.GetComponent<PlayerController>().getSelectedTile())
-            {
-                isClickedOn = false;
-                HideBlueprint();
-            }
+        ShowBlueprint(playerController.getSelectedTowerID());
         }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !isOccupied)
+        {
+            Debug.Log("Building tower");
+            BuildTower(playerController.getSelectedTowerID());
+        }
+
+    }
+
+    private void OnMouseExit()
+    {
+        isClickedOn = false;
     }
 }
