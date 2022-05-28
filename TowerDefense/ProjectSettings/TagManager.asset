@@ -8,11 +8,12 @@ TagManager:
   - Tile
   - Blueprint
   - Tower
+  - BuildModePanel
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Enemy
   - Water
   - UI
   - 

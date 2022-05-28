@@ -36,9 +36,10 @@ public class TileScript : MonoBehaviour
 
     public void BuildTower(int id)
     {
-        if(buildMode && !isOccupied)
+        if (buildMode && !isOccupied)
         {
-            id--;
+            id = 0;
+            Debug.Log(id);
             isOccupied = true;
             Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
             HideBlueprint();
@@ -60,7 +61,7 @@ public class TileScript : MonoBehaviour
 
         if (!isOccupied)
         {
-        ShowBlueprint(playerController.getSelectedTowerID());
+            ShowBlueprint(playerController.getSelectedTowerID());
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && !isOccupied)
@@ -68,7 +69,6 @@ public class TileScript : MonoBehaviour
             Debug.Log("Building tower");
             BuildTower(playerController.getSelectedTowerID());
         }
-
     }
 
     private void OnMouseExit()
