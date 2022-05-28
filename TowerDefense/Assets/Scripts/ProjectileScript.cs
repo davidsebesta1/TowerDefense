@@ -4,17 +4,24 @@ using UnityEngine;
 
 public class ProjectileScript : MonoBehaviour
 {
+    [SerializeField] private float damage;
+
     private void Start()
     {
-        Destroy(gameObject, 5);
+        Destroy(gameObject, 3);
     }
     private void OnTriggerEnter(Collider other)
 
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            Destroy(other.gameObject);
+            other.gameObject.GetComponent<EnemyScript>().RemoveHealth(damage);
             Destroy(gameObject);
         }
+    }
+
+    public void SetDamage(float newDamage)
+    {
+        damage = newDamage;
     }
 }

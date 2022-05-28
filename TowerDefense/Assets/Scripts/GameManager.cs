@@ -35,15 +35,20 @@ public class GameManager : MonoBehaviour
             }
             enemies.AddRange(enArray);
 
-            moneyLabel.text = "Money: " + player.GetComponent<PlayerController>().getMoneyAmount();
+            moneyLabel.text = "Money: " + player.GetComponent<PlayerController>().GetMoneyAmount();
             healthLabel.text = "Wall Health: " + wallHealth + "%";
-            waveLabel.text = "Wave: " + spawnManager.GetComponent<SpawnManager>().getWaveNumber();
+            waveLabel.text = "Wave: " + spawnManager.GetComponent<SpawnManager>().GetWaveNumber();
         }
     }
 
-    public List<GameObject> getEnemiesList()
+    public List<GameObject> GetEnemiesList()
     {
         return enemies;
+    }
+
+    public void WallDamage(int damage)
+    {
+        wallHealth -= damage;
     }
 }
 

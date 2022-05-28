@@ -9,6 +9,7 @@ public class TileScript : MonoBehaviour
     [SerializeField] private GameObject[] towerObjects;
 
     private GameObject playerCamera;
+    private PlayerController playerController;
 
     private bool isClickedOn = false;
     private bool buildMode = false;
@@ -17,13 +18,13 @@ public class TileScript : MonoBehaviour
     private void Start()
     {
         playerCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        playerController = playerCamera.GetComponent<PlayerController>();
     }
 
     private void ShowBlueprint(int towerID)
     {
-        if (isClickedOn && buildMode && towerID != 0)
+        if (isClickedOn && buildMode)
         {
-            towerID--;
             Debug.Log(towerID);
             Instantiate(towerTemplates[towerID], transform.position + new Vector3(0, 0.1f, 0), towerTemplates[towerID].transform.rotation);
         }
@@ -38,36 +39,52 @@ public class TileScript : MonoBehaviour
     {
         if (buildMode && !isOccupied)
         {
-            id = 0;
-            Debug.Log(id);
-            isOccupied = true;
-            Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
-            HideBlueprint();
+            Debug.Log("id: " + id);
+            switch (id)
+            {
+                case 0:
+                    if (playerCamera.GetComponent<PlayerController>().GetMoneyAmount() >= 20)
+                    {
+                        isOccupied = true;
+                        Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
+                        playerCamera.GetComponent<PlayerController>().AddMoneyAmount(-20);
+                        HideBlueprint();
+                    }
+                    break;
+                case 1:
+                    if (playerCamera.GetComponent<PlayerController>().GetMoneyAmount() >= 75)
+                    {
+                        isOccupied = true;
+                        Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
+                        playerCamera.GetComponent<PlayerController>().AddMoneyAmount(-75);
+                        HideBlueprint();
+                    }
+                    break;
+            }
         }
     }
 
     private void OnMouseEnter()
     {
         isClickedOn = true;
-        PlayerController playerController = playerCamera.GetComponent<PlayerController>();
-        buildMode = playerController.getBuildMode();
+        buildMode = playerController.GetBuildMode();
 
-        if (playerController.getSelectedTile() != null)
+        if (playerController.GetSelectedTile() != null)
         {
-            playerController.getSelectedTile().gameObject.GetComponent<TileScript>().HideBlueprint();
+            playerController.GetSelectedTile().gameObject.GetComponent<TileScript>().HideBlueprint();
         }
 
-        playerController.setSelectedTile(this.gameObject);
+        playerController.SetSelectedTile(this.gameObject);
 
         if (!isOccupied)
         {
-            ShowBlueprint(playerController.getSelectedTowerID());
+            ShowBlueprint(playerController.GetSelectedTowerID());
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && !isOccupied)
         {
             Debug.Log("Building tower");
-            BuildTower(playerController.getSelectedTowerID());
+            BuildTower(playerController.GetSelectedTowerID());
         }
     }
 

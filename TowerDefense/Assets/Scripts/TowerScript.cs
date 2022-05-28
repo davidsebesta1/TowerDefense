@@ -1,26 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TowerScript : MonoBehaviour
+public abstract class TowerScript : MonoBehaviour
 {
-    [SerializeField] private float fireRate;
-    [SerializeField] private float range;
-    [SerializeField] private GameObject projectile;
+    [SerializeField] protected float fireRate;
+    [SerializeField] protected float range;
+    [SerializeField] protected GameObject projectile;
+    [SerializeField] protected float damageOverride;
 
-    List<GameObject> enemiesAll = new List<GameObject>();
-    List<GameObject> enemiesInRadius = new List<GameObject>();
+    protected List<GameObject> enemiesAll = new List<GameObject>();
+    protected List<GameObject> enemiesInRadius = new List<GameObject>();
 
-    private bool canFire = false;
+    protected bool canFire = false;
 
-    private void Start()
+    protected void Start()
     {
         fireRate = 1 / fireRate;
         gameObject.GetComponent<SphereCollider>().radius = range;
         StartCoroutine(FireCountdown());
     }
 
-    void GetGameObjectsInRadius()
+    protected void GetGameObjectsInRadius()
     {
         enemiesInRadius.Clear();
         foreach (GameObject en in enemiesAll)
@@ -31,8 +33,6 @@ public class TowerScript : MonoBehaviour
             }
         }
 
-        Debug.Log("enemies in radius: " + enemiesInRadius.Count);
-
         if(enemiesInRadius.Count > 0)
         {
             canFire = true;
@@ -42,20 +42,26 @@ public class TowerScript : MonoBehaviour
         }
     }
 
-    IEnumerator FireCountdown()
+    protected virtual IEnumerator FireCountdown()
     {
         while (true)
         {
             yield return new WaitForSeconds(fireRate);
-            enemiesAll = GameObject.Find("GameManager").GetComponent<GameManager>().getEnemiesList();
+            enemiesAll = GameObject.Find("GameManager").GetComponent<GameManager>().GetEnemiesList();
             GetGameObjectsInRadius();
             if (canFire)
             {
-                Debug.Log("fired");
                 GameObject prot = Instantiate(projectile, gameObject.transform.position, projectile.transform.rotation);
-                Vector3 dir = (enemiesInRadius[0].transform.position - prot.transform.position).normalized * 10f + enemiesInRadius[0].transform.forward * -0.25f;
-                prot.transform.LookAt(enemiesInRadius[0].transform);
-                prot.gameObject.GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
+                prot.GetComponent<ProjectileScript>().SetDamage(damageOverride);
+                try
+                {
+                    Vector3 dir = (enemiesInRadius[0].transform.position - prot.transform.position).normalized * 10f + enemiesInRadius[0].transform.forward * -0.25f;
+                    prot.transform.LookAt(enemiesInRadius[0].transform);
+                    prot.gameObject.GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
+                } catch(Exception e)
+                {
+                    Destroy(prot);
+                }
             }
         }
     }

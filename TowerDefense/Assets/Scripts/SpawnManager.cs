@@ -19,10 +19,27 @@ public class SpawnManager : MonoBehaviour
     IEnumerator SpawnNextWave()
     {
         Debug.Log("Wave:" + wave);
-        for (int i = 0; i < wave; i++)
+        for (int i = 0; i < wave;)
         {
-            yield return new WaitForSeconds(0.7f);
-            Instantiate(enemies[0], spawnPoint.transform.position, enemies[0].transform.rotation);
+            yield return new WaitForSeconds(0.7f + Random.Range(-0.15f, 0.15f));
+
+            int randomIndex = Random.Range(0, enemies.Length);
+            if (randomIndex == 1 && wave >= 10)
+            {
+                Instantiate(enemies[1], spawnPoint.transform.position, enemies[1].transform.rotation);
+                i += 2;
+            }
+            else if (randomIndex == 2 && wave >= 20)
+            {
+                Instantiate(enemies[2], spawnPoint.transform.position, enemies[2].transform.rotation);
+                i += 3;
+            }
+            else
+            {
+                Instantiate(enemies[0], spawnPoint.transform.position, enemies[0].transform.rotation);
+                i++;
+            }
+
         }
     }
 
@@ -30,13 +47,19 @@ public class SpawnManager : MonoBehaviour
     {
         while (isGameActive)
         {
-            yield return new WaitForSeconds(wave * 1.1f);
+            if(wave < 10)
+            {
+                yield return new WaitForSeconds(wave * 1.5f);
+            } else
+            {
+                yield return new WaitForSeconds(wave * 0.6f);
+            }
             wave++;
             StartCoroutine(SpawnNextWave());
         }
     }
 
-    public int getWaveNumber()
+    public int GetWaveNumber()
     {
         return wave;
     }

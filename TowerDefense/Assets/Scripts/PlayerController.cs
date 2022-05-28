@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     private float verticalInput;
     private int selectedTowerID = 0;
 
-    private int money = 0;
+    private int money = 99999;
 
     private int UILayer;
 
@@ -69,14 +69,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //Returns 'true' if we touched or hovering on Unity UI element.
     public bool IsPointerOverUIElement()
     {
         return IsPointerOverUIElement(GetEventSystemRaycastResults());
     }
 
 
-    //Returns 'true' if we touched or hovering on Unity UI element.
     private bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
     {
         for (int index = 0; index < eventSystemRaysastResults.Count; index++)
@@ -88,8 +86,6 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-
-    //Gets all event system raycast results of current mouse or touch position.
     static List<RaycastResult> GetEventSystemRaycastResults()
     {
         PointerEventData eventData = new PointerEventData(EventSystem.current);
@@ -106,37 +102,37 @@ public class PlayerController : MonoBehaviour
         transform.Translate(dir);
     }
 
-    public void setSelectedTile(GameObject tile)
+    public void SetSelectedTile(GameObject tile)
     {
         this.selectedTile = tile;
     }
 
-    public GameObject getSelectedTile()
+    public GameObject GetSelectedTile()
     {
         return this.selectedTile;
     }
 
-    public bool getBuildMode()
+    public bool GetBuildMode()
     {
         return buildMode;
     }
 
-    public void setSelectedTowerID(int id)
+    public void SetSelectedTowerID(int id)
     {
         this.selectedTowerID = id;
     }
 
-    public int getSelectedTowerID()
+    public int GetSelectedTowerID()
     {
         return selectedTowerID;
     }
 
-    public int getMoneyAmount()
+    public int GetMoneyAmount()
     {
         return money;
     }
 
-    public void addMoneyAmount(int add)
+    public void AddMoneyAmount(int add)
     {
         money += add;
     }
