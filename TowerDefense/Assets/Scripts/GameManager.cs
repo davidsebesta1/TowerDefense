@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
         isGameActive = true;
         spawnManager.GetComponent<SpawnManager>().StartGame();
         player.GetComponent<PlayerController>().StartGame();
+
+        StartCoroutine(TextChanger());
     }
 
     private void Update()
@@ -34,10 +36,6 @@ public class GameManager : MonoBehaviour
                 enemies.Clear();
             }
             enemies.AddRange(enArray);
-
-            moneyLabel.text = "Money: " + player.GetComponent<PlayerController>().GetMoneyAmount();
-            healthLabel.text = "Wall Health: " + wallHealth + "%";
-            waveLabel.text = "Wave: " + spawnManager.GetComponent<SpawnManager>().GetWaveNumber();
         }
     }
 
@@ -49,6 +47,18 @@ public class GameManager : MonoBehaviour
     public void WallDamage(int damage)
     {
         wallHealth -= damage;
+    }
+
+    IEnumerator TextChanger()
+    {
+        while (isGameActive)
+        {
+            yield return new WaitForSeconds(0.1f);
+
+            moneyLabel.text = "Money: " + player.GetComponent<PlayerController>().GetMoneyAmount();
+            healthLabel.text = "Wall Health: " + wallHealth + "%";
+            waveLabel.text = "Wave: " + spawnManager.GetComponent<SpawnManager>().GetWaveNumber();
+        }
     }
 }
 

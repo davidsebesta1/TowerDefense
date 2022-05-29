@@ -9,6 +9,7 @@ TagManager:
   - Blueprint
   - Tower
   - BuildModePanel
+  - Cloud
   layers:
   - Default
   - TransparentFX

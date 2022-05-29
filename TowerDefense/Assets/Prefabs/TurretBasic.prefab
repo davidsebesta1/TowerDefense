@@ -43,7 +43,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7913205725148891832
 MonoBehaviour:
@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 1
-  range: 4
+  range: 3
   projectile: {fileID: 7593505098944714952, guid: 25fde71fd528aa7429ddef9fc669b50a, type: 3}
   rotatingPart: {fileID: 8662422595525723427}
   damageOverride: 1

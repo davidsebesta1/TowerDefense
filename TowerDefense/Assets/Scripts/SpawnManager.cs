@@ -26,16 +26,20 @@ public class SpawnManager : MonoBehaviour
             int randomIndex = Random.Range(0, enemies.Length);
             if (randomIndex == 1 && wave >= 10)
             {
+
+                //speedy
                 Instantiate(enemies[1], spawnPoint.transform.position, enemies[1].transform.rotation);
                 i += 2;
             }
             else if (randomIndex == 2 && wave >= 20)
             {
+                //tank
                 Instantiate(enemies[2], spawnPoint.transform.position, enemies[2].transform.rotation);
                 i += 3;
             }
             else
             {
+                //basic
                 Instantiate(enemies[0], spawnPoint.transform.position, enemies[0].transform.rotation);
                 i++;
             }
