@@ -53,7 +53,7 @@ public class SpawnManager : MonoBehaviour
         {
             if(wave < 10)
             {
-                yield return new WaitForSeconds(wave * 1.5f);
+                yield return new WaitForSeconds(wave * 2f);
             } else
             {
                 yield return new WaitForSeconds(wave * 0.6f);
