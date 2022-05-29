@@ -40,13 +40,13 @@ public class TileScript : MonoBehaviour
         if (buildMode && !isOccupied)
         {
             Debug.Log("id: " + id);
+            isOccupied = true;
+            Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
             switch (id)
             {
                 case 0:
                     if (playerCamera.GetComponent<PlayerController>().GetMoneyAmount() >= 20) // basic tower
                     {
-                        isOccupied = true;
-                        Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
                         playerCamera.GetComponent<PlayerController>().AddMoneyAmount(-20);
                         HideBlueprint();
                     }
@@ -54,17 +54,13 @@ public class TileScript : MonoBehaviour
                 case 1:
                     if (playerCamera.GetComponent<PlayerController>().GetMoneyAmount() >= 75) // machine gun
                     {
-                        isOccupied = true;
-                        Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
                         playerCamera.GetComponent<PlayerController>().AddMoneyAmount(-75);
                         HideBlueprint();
                     }
                     break;
                 case 2:
                     if (playerCamera.GetComponent<PlayerController>().GetMoneyAmount() >= 200) // rail gun
-                    {
-                        isOccupied = true;
-                        Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
+                    {  
                         playerCamera.GetComponent<PlayerController>().AddMoneyAmount(-200);
                         HideBlueprint();
                     }

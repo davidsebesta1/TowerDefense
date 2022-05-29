@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private CanvasRenderer BuildPanel;
     [SerializeField] private Button startButton;
+    [SerializeField] private Button restartButton;
+
+    private Rigidbody rb;
 
     private GameObject selectedTile;
 
@@ -25,11 +28,24 @@ public class PlayerController : MonoBehaviour
     private bool isGameActive = false;
     private bool isOverBuildModePanel = false;
 
+    private void Start()
+    {
+        rb = gameObject.GetComponent<Rigidbody>();
+        UILayer = LayerMask.NameToLayer("UI");
+    }
+
     public void StartGame()
     {
-        UILayer = LayerMask.NameToLayer("UI");
         isGameActive = true;
         startButton.gameObject.SetActive(false);
+    }
+
+    public void EndGame()
+    {
+        isGameActive = false;
+        verticalInput = 0f;
+        horizontalInput = 0f;
+        restartButton.gameObject.SetActive(true);
     }
 
     private void Update()
@@ -67,6 +83,26 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+
+        if(gameObject.transform.position.x > 20f)
+        {
+            horizontalInput += -1.5f;
+        }
+
+        if(gameObject.transform.position.x < -5f)
+        {
+            horizontalInput += 1.5f;
+        }
+
+        if (gameObject.transform.position.z > 30f)
+        {
+            verticalInput += -1.5f;
+        }
+
+        if (gameObject.transform.position.z < 0f)
+        {
+            verticalInput += 1.5f;
+        }
     }
 
     public bool IsPointerOverUIElement()
@@ -98,8 +134,8 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        Vector3 dir = new Vector3(horizontalInput * speed * Time.deltaTime, verticalInput * speed * Time.deltaTime, 0);
-        transform.Translate(dir);
+        Vector3 dir = new Vector3(horizontalInput, 0, verticalInput) * speed * Time.deltaTime;
+        rb.AddForce(dir, ForceMode.Impulse);
     }
 
     public void SetSelectedTile(GameObject tile)

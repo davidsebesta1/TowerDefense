@@ -16,6 +16,12 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(AutomaticNextWaveCounter());
     }
 
+    public void EndGame()
+    {
+        isGameActive = false;
+        StopAllCoroutines();
+    }
+
     IEnumerator SpawnNextWave()
     {
         Debug.Log("Wave:" + wave);
