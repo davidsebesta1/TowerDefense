@@ -41,9 +41,9 @@ public class MachineGunTowerScript : TowerScript
                         rotatingPart.transform.rotation = portRot * Quaternion.Euler(0, 90, 0);
 
                         //applying move force
-                        proj.gameObject.GetComponent<Rigidbody>().AddForce(dir * 1.5f, ForceMode.Impulse);
+                        proj.GetComponent<Rigidbody>().AddForce(dir * 1.5f, ForceMode.Impulse);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         // in case something weird happens which I dont know what it is
                         if (op != null)

@@ -76,9 +76,9 @@ public abstract class TowerScript : MonoBehaviour
 
                     //applying force and rotation
                     rotatingPart.transform.rotation = portRot * Quaternion.Euler(0,0,90);
-                    proj.gameObject.GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
+                    proj.GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     if (op != null)
                     {

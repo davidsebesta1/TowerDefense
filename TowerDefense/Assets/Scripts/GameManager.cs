@@ -16,8 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI deadWaveLabel;
 
     private int wallHealth = 100;
-
-    List<GameObject> enemies = new List<GameObject>();
+    private List<GameObject> enemies = new List<GameObject>();
 
     public void StartGame()
     {

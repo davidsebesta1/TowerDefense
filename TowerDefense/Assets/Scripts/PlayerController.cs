@@ -72,9 +72,8 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
-                RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 100.0f))
+                if (Physics.Raycast(ray, out RaycastHit hit, 100.0f))
                 {
                     if (hit.collider.gameObject.CompareTag("Tile") && !isOverBuildModePanel)
                     {
@@ -134,7 +133,7 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        Vector3 dir = new Vector3(horizontalInput, 0, verticalInput) * speed * Time.deltaTime;
+        Vector3 dir = speed * Time.deltaTime * new Vector3(horizontalInput, 0, verticalInput);
         rb.AddForce(dir, ForceMode.Impulse);
     }
 

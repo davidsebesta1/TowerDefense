@@ -5,7 +5,9 @@ using UnityEngine;
 public class ObjectPooler : MonoBehaviour
 {
     [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private GameObject rocketPrefab;
     [SerializeField] private Queue<GameObject> projectilePool = new Queue<GameObject>();
+    [SerializeField] private Queue<GameObject> rocketPool = new Queue<GameObject>();
     [SerializeField] private int startSize = 5;
 
     private void Start()
@@ -15,6 +17,13 @@ public class ObjectPooler : MonoBehaviour
             GameObject prot = Instantiate(projectilePrefab);
             projectilePool.Enqueue(prot);
             prot.SetActive(false);
+        }
+
+        for(int i = 0; i < startSize; i++)
+        {
+            GameObject rocket = Instantiate(rocketPrefab);
+            rocketPool.Enqueue(rocket);
+            rocket.SetActive(false);
         }
     }
 
@@ -30,6 +39,27 @@ public class ObjectPooler : MonoBehaviour
             GameObject prot = Instantiate(projectilePrefab);
             return prot;
         }
+    }
+
+    public GameObject GetRocket()
+    {
+        if(rocketPool.Count > 0)
+        {
+            GameObject roc = rocketPool.Dequeue();
+            roc.SetActive(true);
+            return roc;
+        } else
+        {
+            GameObject roc = Instantiate(rocketPrefab);
+            return roc;
+        }
+    }
+
+    public void ReturnRocket(GameObject roc)
+    {
+        rocketPool.Enqueue(roc);
+        roc.SetActive(false);
+
     }
 
 

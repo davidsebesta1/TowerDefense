@@ -29,7 +29,7 @@ public class ProjectileScript : MonoBehaviour
 
     public void SetDamage(float newDamage)
     {
-        damage = newDamage;
+        this.damage = newDamage;
     }
 
     private void OnDisable()

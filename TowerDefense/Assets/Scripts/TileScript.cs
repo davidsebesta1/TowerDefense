@@ -40,8 +40,6 @@ public class TileScript : MonoBehaviour
         if (buildMode && !isOccupied)
         {
             Debug.Log("id: " + id);
-            isOccupied = true;
-            Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
             switch (id)
             {
                 case 0:
@@ -49,6 +47,8 @@ public class TileScript : MonoBehaviour
                     {
                         playerCamera.GetComponent<PlayerController>().AddMoneyAmount(-20);
                         HideBlueprint();
+                        isOccupied = true;
+                        Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
                     }
                     break;
                 case 1:
@@ -56,13 +56,26 @@ public class TileScript : MonoBehaviour
                     {
                         playerCamera.GetComponent<PlayerController>().AddMoneyAmount(-75);
                         HideBlueprint();
+                        isOccupied = true;
+                        Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
                     }
                     break;
                 case 2:
                     if (playerCamera.GetComponent<PlayerController>().GetMoneyAmount() >= 200) // rail gun
-                    {  
+                    {
                         playerCamera.GetComponent<PlayerController>().AddMoneyAmount(-200);
                         HideBlueprint();
+                        isOccupied = true;
+                        Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
+                    }
+                    break;
+                case 3:
+                    if (playerCamera.GetComponent<PlayerController>().GetMoneyAmount() >= 350) // rail gun
+                    {
+                        playerCamera.GetComponent<PlayerController>().AddMoneyAmount(-350);
+                        HideBlueprint();
+                        isOccupied = true;
+                        Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
                     }
                     break;
             }
