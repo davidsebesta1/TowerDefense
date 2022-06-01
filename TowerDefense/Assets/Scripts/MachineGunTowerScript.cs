@@ -23,7 +23,7 @@ public class MachineGunTowerScript : TowerScript
                     proj.transform.position = gameObject.transform.position;
                     proj.GetComponent<ProjectileScript>().Spawn();
                     proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                    proj.GetComponent<ProjectileScript>().SetDamage(damageOverride);
+                    proj.GetComponent<ProjectileScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
                     GetGameObjectsInRadius();
                     try
                     {

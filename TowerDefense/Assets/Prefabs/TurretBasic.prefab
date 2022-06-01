@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 8662422595524827429}
   - component: {fileID: 8662422595523730405}
   m_Layer: 0
-  m_Name: Gun1.2
+  m_Name: RotatingStuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -156,7 +156,7 @@ GameObject:
   - component: {fileID: 8662422595524827431}
   - component: {fileID: 8662422595523730407}
   m_Layer: 0
-  m_Name: Gun1.1
+  m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

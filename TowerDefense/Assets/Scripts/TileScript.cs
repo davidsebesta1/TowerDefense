@@ -78,6 +78,15 @@ public class TileScript : MonoBehaviour
                         Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
                     }
                     break;
+                case 4:
+                    if (playerCamera.GetComponent<PlayerController>().GetMoneyAmount() >= 550) // artillery
+                    {
+                        playerCamera.GetComponent<PlayerController>().AddMoneyAmount(-550);
+                        HideBlueprint();
+                        isOccupied = true;
+                        Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
+                    }
+                    break;
             }
         }
     }
@@ -89,7 +98,7 @@ public class TileScript : MonoBehaviour
 
         if (playerController.GetSelectedTile() != null)
         {
-            playerController.GetSelectedTile().gameObject.GetComponent<TileScript>().HideBlueprint();
+            playerController.GetSelectedTile().GetComponent<TileScript>().HideBlueprint();
         }
 
         playerController.SetSelectedTile(this.gameObject);

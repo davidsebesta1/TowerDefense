@@ -10,7 +10,7 @@ public class EnemyScript : MonoBehaviour
 
     private void Update()
     {
-        transform.Translate(transform.forward * -speed * Time.deltaTime);
+        transform.Translate(-speed * Time.deltaTime * transform.forward);
     }
 
     public float GetHealth()

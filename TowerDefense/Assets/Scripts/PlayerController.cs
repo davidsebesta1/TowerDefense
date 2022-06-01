@@ -9,24 +9,28 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private CanvasRenderer BuildPanel;
+    [SerializeField] private CanvasRenderer ArtyPanel;
     [SerializeField] private Button startButton;
     [SerializeField] private Button restartButton;
+    [SerializeField] private GameObject artyTargetPrefab;
 
     private Rigidbody rb;
 
     private GameObject selectedTile;
+    private GameObject selectedArty;
 
     private float horizontalInput;
     private float verticalInput;
     private int selectedTowerID = 0;
 
-    private int money = 99999;
+    private int money = 300;
 
     private int UILayer;
 
     private bool buildMode = false;
     private bool isGameActive = false;
     private bool isOverBuildModePanel = false;
+    private bool artySelectionMode = false;
 
     private void Start()
     {
@@ -75,9 +79,26 @@ public class PlayerController : MonoBehaviour
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hit, 100.0f))
                 {
+                    if (hit.collider.gameObject.CompareTag("Artillery") && !isOverBuildModePanel)
+                    {
+                        Debug.Log("artyy");
+                        selectedArty = hit.collider.gameObject.transform.parent.gameObject.GetComponentInChildren<ArtilleryScript>().gameObject;
+                        ArtyPanel.gameObject.SetActive(true);
+                        SetArtySelectionMode(true);
+                    }
+
                     if (hit.collider.gameObject.CompareTag("Tile") && !isOverBuildModePanel)
                     {
                         hit.collider.gameObject.GetComponent<TileScript>().BuildTower(selectedTowerID);
+                    }
+
+                    if (hit.collider.gameObject.CompareTag("Path") && !isOverBuildModePanel && artySelectionMode)
+                    {
+                        Vector3 localHit = hit.point;
+                        selectedArty.GetComponent<ArtilleryScript>().SetTarget(Instantiate(artyTargetPrefab, localHit + new Vector3(0, 0.1f, 0), Quaternion.Euler(90, 0, 0)));
+
+                        SetArtySelectionMode(false);
+                        ArtyPanel.gameObject.SetActive(false);
                     }
                 }
             }
@@ -88,12 +109,12 @@ public class PlayerController : MonoBehaviour
             horizontalInput += -1.5f;
         }
 
-        if(gameObject.transform.position.x < -5f)
+        if(gameObject.transform.position.x < 0f)
         {
             horizontalInput += 1.5f;
         }
 
-        if (gameObject.transform.position.z > 30f)
+        if (gameObject.transform.position.z > 25f)
         {
             verticalInput += -1.5f;
         }
@@ -170,5 +191,15 @@ public class PlayerController : MonoBehaviour
     public void AddMoneyAmount(int add)
     {
         money += add;
+    }
+
+    public void SetArtySelectionMode(bool newMode)
+    {
+        this.artySelectionMode = newMode;
+       if(selectedArty != null)
+        {
+            Debug.Log(selectedArty.name);
+            selectedArty.GetComponent<ArtilleryScript>().SetEditMode(newMode);
+        }
     }
 }

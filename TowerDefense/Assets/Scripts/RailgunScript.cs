@@ -17,7 +17,7 @@ public class RailgunScript : TowerScript
                 GameObject proj = op.GetProjectile();
                 proj.transform.position = gameObject.transform.position;
                 proj.GetComponent<ProjectileScript>().Spawn();
-                proj.GetComponent<ProjectileScript>().SetDamage(damageOverride);
+                proj.GetComponent<ProjectileScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
                 proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 try
                 {

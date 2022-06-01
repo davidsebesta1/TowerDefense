@@ -10,6 +10,7 @@ public abstract class TowerScript : MonoBehaviour
     [SerializeField] protected GameObject projectile;
     [SerializeField] protected GameObject rotatingPart;
     [SerializeField] protected float damageOverride;
+    [SerializeField] protected float towerTierDamageMultiplier;
 
     protected List<GameObject> enemiesAll = new List<GameObject>();
     protected List<GameObject> enemiesInRadius = new List<GameObject>();
@@ -60,7 +61,7 @@ public abstract class TowerScript : MonoBehaviour
                 GameObject proj = op.GetProjectile();
                 proj.transform.position = gameObject.transform.position;
                 proj.GetComponent<ProjectileScript>().Spawn();
-                proj.GetComponent<ProjectileScript>().SetDamage(damageOverride);
+                proj.GetComponent<ProjectileScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
                 proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 try
                 {

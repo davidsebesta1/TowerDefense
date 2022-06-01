@@ -10,6 +10,8 @@ TagManager:
   - Tower
   - BuildModePanel
   - Cloud
+  - Artillery
+  - Path
   layers:
   - Default
   - TransparentFX

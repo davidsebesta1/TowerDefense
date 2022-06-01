@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 2783850881131691208}
   - component: {fileID: 2783850881132690952}
   m_Layer: 0
-  m_Name: RocketLauncher1
+  m_Name: RotatingStuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 2783850881131691210}
   - component: {fileID: 2783850881132690954}
   m_Layer: 0
-  m_Name: RocketLauncher_0
+  m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

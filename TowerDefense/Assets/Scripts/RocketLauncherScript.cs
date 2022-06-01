@@ -20,7 +20,7 @@ public class RocketLauncherScript : TowerScript
                     GameObject proj = op.GetRocket();
                     proj.transform.position = gameObject.transform.position;
                     proj.GetComponent<RocketScript>().Spawn();
-                    proj.GetComponent<RocketScript>().SetDamage(damageOverride);
+                    proj.GetComponent<RocketScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
                     proj.GetComponent<RocketScript>().SetTarget(enemiesInRadius[0]);
                     proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
                     try

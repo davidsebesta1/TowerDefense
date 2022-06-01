@@ -6,8 +6,10 @@ public class ObjectPooler : MonoBehaviour
 {
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private GameObject rocketPrefab;
+    [SerializeField] private GameObject artyPrefab;
     [SerializeField] private Queue<GameObject> projectilePool = new Queue<GameObject>();
     [SerializeField] private Queue<GameObject> rocketPool = new Queue<GameObject>();
+    [SerializeField] private Queue<GameObject> artilleryPool = new Queue<GameObject>();
     [SerializeField] private int startSize = 5;
 
     private void Start()
@@ -24,6 +26,13 @@ public class ObjectPooler : MonoBehaviour
             GameObject rocket = Instantiate(rocketPrefab);
             rocketPool.Enqueue(rocket);
             rocket.SetActive(false);
+        }
+
+        for (int i = 0; i < startSize; i++)
+        {
+            GameObject arty = Instantiate(artyPrefab);
+            artilleryPool.Enqueue(arty);
+            arty.SetActive(false);
         }
     }
 
@@ -55,6 +64,21 @@ public class ObjectPooler : MonoBehaviour
         }
     }
 
+    public GameObject GetArty()
+    {
+        if (artilleryPool.Count > 0)
+        {
+            GameObject arty = artilleryPool.Dequeue();
+            arty.SetActive(true);
+            return arty;
+        }
+        else
+        {
+            GameObject arty = Instantiate(artyPrefab);
+            return arty;
+        }
+    }
+
     public void ReturnRocket(GameObject roc)
     {
         rocketPool.Enqueue(roc);
@@ -62,10 +86,15 @@ public class ObjectPooler : MonoBehaviour
 
     }
 
-
     public void ReturnProjectile(GameObject prot)
     {
         projectilePool.Enqueue(prot);
         prot.SetActive(false);
+    }
+
+    public void ReturnArty(GameObject arty)
+    {
+        artilleryPool.Enqueue(arty);
+        arty.SetActive(false);
     }
 }

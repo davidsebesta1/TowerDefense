@@ -111,7 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   health: 4
-  moneyValue: 3
+  moneyValue: 5
 --- !u!54 &7874076719488729767
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 8978712277030682277}
   - component: {fileID: 8978712277029715045}
   m_Layer: 0
-  m_Name: Turret1.2
+  m_Name: RotatingStuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -156,7 +156,7 @@ GameObject:
   - component: {fileID: 8978712277030682279}
   - component: {fileID: 8978712277029715047}
   m_Layer: 0
-  m_Name: Turret1.1
+  m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
