@@ -351,4 +351,5 @@ MonoBehaviour:
   fireRate: 0.1
   projectile: {fileID: 3192707555163925463, guid: 64e954fd1182b1348bb1781cb082a3d1, type: 3}
   rotatingPart: {fileID: 2774132449809855187}
-  damageOverride: 5
+  damageOverride: 15
+  towerTierDamageMultiplier: 1

@@ -7,35 +7,52 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
+    //Serialized Variables
     [SerializeField] private float speed;
+
     [SerializeField] private CanvasRenderer BuildPanel;
     [SerializeField] private CanvasRenderer ArtyPanel;
     [SerializeField] private Button startButton;
     [SerializeField] private Button restartButton;
+
     [SerializeField] private GameObject artyTargetPrefab;
 
+    //Rigidbody
     private Rigidbody rb;
 
+    //Selections
     private GameObject selectedTile;
     private GameObject selectedArty;
 
+    //Inputs
     private float horizontalInput;
     private float verticalInput;
+
     private int selectedTowerID = 0;
 
-    private int money = 300;
+    //Money
+    private int money = 150;
 
     private int UILayer;
 
+    //Bool stuff
     private bool buildMode = false;
     private bool isGameActive = false;
     private bool isOverBuildModePanel = false;
     private bool artySelectionMode = false;
 
+    //Creative mode bool
+    private bool creativeMode = true;
+
     private void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
         UILayer = LayerMask.NameToLayer("UI");
+
+        if (creativeMode)
+        {
+            this.money = 999999;
+        }
     }
 
     public void StartGame()
@@ -81,7 +98,6 @@ public class PlayerController : MonoBehaviour
                 {
                     if (hit.collider.gameObject.CompareTag("Artillery") && !isOverBuildModePanel)
                     {
-                        Debug.Log("artyy");
                         selectedArty = hit.collider.gameObject.transform.parent.gameObject.GetComponentInChildren<ArtilleryScript>().gameObject;
                         ArtyPanel.gameObject.SetActive(true);
                         SetArtySelectionMode(true);
@@ -95,7 +111,7 @@ public class PlayerController : MonoBehaviour
                     if (hit.collider.gameObject.CompareTag("Path") && !isOverBuildModePanel && artySelectionMode)
                     {
                         Vector3 localHit = hit.point;
-                        selectedArty.GetComponent<ArtilleryScript>().SetTarget(Instantiate(artyTargetPrefab, localHit + new Vector3(0, 0.1f, 0), Quaternion.Euler(90, 0, 0)));
+                        selectedArty.GetComponent<ArtilleryScript>().SetTarget(Instantiate(artyTargetPrefab, localHit + new Vector3(0, 0.01f, 0), Quaternion.Euler(90, 0, 0)));
 
                         SetArtySelectionMode(false);
                         ArtyPanel.gameObject.SetActive(false);

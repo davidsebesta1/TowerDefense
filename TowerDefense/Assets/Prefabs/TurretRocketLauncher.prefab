@@ -252,8 +252,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9012838f342a95499f0e28705d6cb78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireRate: 1
-  range: 6
+  fireRate: 0.3
+  range: 7
   projectile: {fileID: 1262282658492564, guid: 7df9bafe504b33b4b96c2d9c75ce8d26, type: 3}
   rotatingPart: {fileID: 2783850881134682314}
-  damageOverride: 25
+  damageOverride: 3
+  towerTierDamageMultiplier: 1

@@ -12,6 +12,9 @@ TagManager:
   - Cloud
   - Artillery
   - Path
+  - FxTemporaire
+  - Ground
+  - Rock
   layers:
   - Default
   - TransparentFX
