@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI deadWaveLabel;
 
     private int wallHealth = 100;
-    private List<GameObject> enemies = new List<GameObject>();
+    private GameObject[] enemies;
 
     public void StartGame()
     {
@@ -30,13 +30,18 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         isGameActive = false;
+
         spawnManager.GetComponent<SpawnManager>().EndGame();
         player.GetComponent<PlayerController>().EndGame();
+
         deadWaveLabel.text = "Waves Survived: " + spawnManager.GetComponent<SpawnManager>().GetWaveNumber();
 
-        GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (GameObject obj in taggedObjects) {
-            Destroy(obj);
+        for(int i = 0; i < enemies.Length; i++)
+        {
+            if(enemies[i] != null)
+            {
+                enemies[i].SetActive(false);
+            }
         }
     }
 
@@ -49,16 +54,11 @@ public class GameManager : MonoBehaviour
     {
         if (isGameActive)
         {
-            GameObject[] enArray = GameObject.FindGameObjectsWithTag("Enemy");
-            if (enemies != null)
-            {
-                enemies.Clear();
-            }
-            enemies.AddRange(enArray);
+            enemies = GameObject.FindGameObjectsWithTag("Enemy");
         }
     }
 
-    public List<GameObject> GetEnemiesList()
+    public GameObject[] GetEnemiesList()
     {
         return enemies;
     }

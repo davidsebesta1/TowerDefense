@@ -40,8 +40,7 @@ public class SpawnManager : MonoBehaviour
                 //speedy
                 GameObject enemy = op.GetEnemySpeed();
                 enemy.GetComponent<EnemySpeedScript>().Spawn();
-                enemy.transform.position = spawnPoint.transform.position;
-                enemy.transform.rotation = enemies[1].transform.rotation;
+                enemy.transform.SetPositionAndRotation(spawnPoint.transform.position, enemies[1].transform.rotation);
                 i += 2;
             }
             else if (randomIndex == 2 && wave >= 20)
@@ -49,8 +48,7 @@ public class SpawnManager : MonoBehaviour
                 //tank
                 GameObject enemy = op.GetEnemyTank();
                 enemy.GetComponent<EnemyTankScript>().Spawn();
-                enemy.transform.position = spawnPoint.transform.position;
-                enemy.transform.rotation = enemies[1].transform.rotation;
+                enemy.transform.SetPositionAndRotation(spawnPoint.transform.position, enemies[1].transform.rotation);
                 i += 3;
             }
             else
@@ -58,8 +56,7 @@ public class SpawnManager : MonoBehaviour
                 //basic
                 GameObject enemy = op.GetEnemyBasic();
                 enemy.GetComponent<EnemyBasicScript>().Spawn();
-                enemy.transform.position = spawnPoint.transform.position;
-                enemy.transform.rotation = enemies[1].transform.rotation;
+                enemy.transform.SetPositionAndRotation(spawnPoint.transform.position, enemies[1].transform.rotation);
                 i++;
             }
 

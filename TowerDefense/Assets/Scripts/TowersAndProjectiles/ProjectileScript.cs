@@ -14,7 +14,7 @@ public class ProjectileScript : MonoBehaviour
 
     private void Start()
     {
-        op = FindObjectOfType<ObjectPooler>();
+        this.op = FindObjectOfType<ObjectPooler>();
     }
 
     public void Spawn()

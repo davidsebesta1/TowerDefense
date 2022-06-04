@@ -15,7 +15,7 @@ public class RocketScript : MonoBehaviour
     private void Start()
     {
         this.op = FindObjectOfType<ObjectPooler>();
-        rb = gameObject.GetComponent<Rigidbody>();
+        this.rb = gameObject.GetComponent<Rigidbody>();
     }
 
     public void Spawn()
@@ -32,7 +32,7 @@ public class RocketScript : MonoBehaviour
             rb.AddForce(dir, ForceMode.Impulse);
         } else
         {
-            Vector3 dir = 5f * Time.deltaTime * transform.up;
+            Vector3 dir = 5f * Time.deltaTime * transform.forward;
             rb.AddForce(dir, ForceMode.Impulse);
         }
     } 
@@ -46,12 +46,14 @@ public class RocketScript : MonoBehaviour
             explosion.GetComponent<ParticleSystem>().Play();
 
             Collider[] collided = Physics.OverlapSphere(transform.position, 0.5f);
-            foreach (Collider col in collided)
+
+            for (int i = 0; i < collided.Length; i++)
             {
-                if (col.gameObject.CompareTag("Enemy"))
+                if (collided[i].gameObject.CompareTag("Enemy"))
                 {
-                    col.gameObject.GetComponent<EnemyScript>().RemoveHealth(damage);
+                    collided[i].gameObject.GetComponent<EnemyScript>().RemoveHealth(damage);
                 }
+
             }
 
             this.gameObject.SetActive(false);

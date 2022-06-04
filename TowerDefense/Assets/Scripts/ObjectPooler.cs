@@ -14,13 +14,13 @@ public class ObjectPooler : MonoBehaviour
     [SerializeField] private GameObject enemyTankPrefab;
 
     [Header("Object Pools")]
-    [SerializeField] private Queue<GameObject> projectilePool = new Queue<GameObject>();
-    [SerializeField] private Queue<GameObject> rocketPool = new Queue<GameObject>();
-    [SerializeField] private Queue<GameObject> artilleryPool = new Queue<GameObject>();
+    [SerializeField] private Queue<GameObject> projectilePool = new();
+    [SerializeField] private Queue<GameObject> rocketPool = new();
+    [SerializeField] private Queue<GameObject> artilleryPool = new();
 
-    [SerializeField] private Queue<GameObject> enemyBasicPool = new Queue<GameObject>();
-    [SerializeField] private Queue<GameObject> enemySpeedPool = new Queue<GameObject>();
-    [SerializeField] private Queue<GameObject> enemyTankPool = new Queue<GameObject>();
+    [SerializeField] private Queue<GameObject> enemyBasicPool = new();
+    [SerializeField] private Queue<GameObject> enemySpeedPool = new();
+    [SerializeField] private Queue<GameObject> enemyTankPool = new();
 
     [Header("Start Size")]
     [SerializeField] private int startSize = 5;

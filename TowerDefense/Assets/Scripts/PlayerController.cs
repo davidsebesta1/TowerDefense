@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
     private bool artySelectionMode = false;
 
     //Creative mode bool
-    private bool creativeMode = true;
+    private readonly bool creativeMode = true;
 
     private void Start()
     {
@@ -160,9 +160,11 @@ public class PlayerController : MonoBehaviour
 
     static List<RaycastResult> GetEventSystemRaycastResults()
     {
-        PointerEventData eventData = new PointerEventData(EventSystem.current);
-        eventData.position = Input.mousePosition;
-        List<RaycastResult> raysastResults = new List<RaycastResult>();
+        PointerEventData eventData = new(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+        List<RaycastResult> raysastResults = new();
         EventSystem.current.RaycastAll(eventData, raysastResults);
         return raysastResults;
     }

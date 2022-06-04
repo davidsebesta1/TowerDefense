@@ -7,7 +7,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip[] audioClips;
 
     [SerializeField] private GameObject audioPlayer;
-    [SerializeField] private Queue<GameObject> audioPool = new Queue<GameObject>();
+    [SerializeField] private Queue<GameObject> audioPool = new();
 
     private void Start()
     {
@@ -22,8 +22,7 @@ public class AudioManager : MonoBehaviour
     public GameObject SpawnClipPlayer(Vector3 spawnPosition, Quaternion rotation, int audioID, bool destroyOnClipEnd, float maxDistance)
     {
         GameObject audioPlayerInstance = GetAudioPlayerObject();
-        audioPlayerInstance.transform.position = spawnPosition;
-        audioPlayerInstance.transform.rotation = rotation;
+        audioPlayerInstance.transform.SetPositionAndRotation(spawnPosition, rotation);
 
         audioPlayerInstance.SetActive(true);
 

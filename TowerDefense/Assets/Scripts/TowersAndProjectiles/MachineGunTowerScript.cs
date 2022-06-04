@@ -24,7 +24,6 @@ public class MachineGunTowerScript : TowerScript
                     proj.GetComponent<ProjectileScript>().Spawn();
                     proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
                     proj.GetComponent<ProjectileScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
-                    GetGameObjectsInRadius();
 
                     //create sound player
                     audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 2, true, 10);

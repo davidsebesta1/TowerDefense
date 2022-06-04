@@ -14,15 +14,17 @@ public class RocketLauncherScript : TowerScript
             GetGameObjectsInRadius();
             if (canFire)
             {
-                for(int i = 0; i < 4; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     yield return new WaitForSeconds(0.25f);
                     GameObject proj = op.GetRocket();
+
                     proj.transform.position = gameObject.transform.position;
                     proj.GetComponent<RocketScript>().Spawn();
                     proj.GetComponent<RocketScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
                     proj.GetComponent<RocketScript>().SetTarget(enemiesInRadius[0]);
                     proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
                     try
                     {
                         //direction vector3

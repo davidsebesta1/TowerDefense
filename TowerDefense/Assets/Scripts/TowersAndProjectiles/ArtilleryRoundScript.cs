@@ -47,13 +47,16 @@ public class ArtilleryRoundScript : MonoBehaviour
 
             //damage to nearby enemies
             Collider[] collided = Physics.OverlapSphere(transform.position, 2f);
-            foreach (Collider col in collided)
+
+            for(int i = 0; i < collided.Length; i++)
             {
-                if (col.gameObject.CompareTag("Enemy"))
+                if (collided[i].gameObject.CompareTag("Enemy"))
                 {
-                    col.gameObject.GetComponent<EnemyScript>().RemoveHealth(damage);
+                    collided[i].gameObject.GetComponent<EnemyScript>().RemoveHealth(damage);
                 }
+
             }
+
             this.gameObject.SetActive(false);
         }
     }

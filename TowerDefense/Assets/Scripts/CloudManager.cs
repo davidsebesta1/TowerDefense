@@ -19,7 +19,7 @@ public class CloudManager : MonoBehaviour
 
             if(clouds[i].transform.position.x > 60)
             {
-                Vector3 newPos = new Vector3(-65f + Random.Range(-15f, 15f), clouds[i].transform.position.y + Random.Range(-5f,5f), Random.Range(-20f, 30f));
+                Vector3 newPos = new(-65f + Random.Range(-15f, 15f), clouds[i].transform.position.y + Random.Range(-5f,5f), Random.Range(-20f, 30f));
                 clouds[i].transform.position = newPos;
             }
         }

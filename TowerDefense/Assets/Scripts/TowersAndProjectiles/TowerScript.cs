@@ -18,8 +18,8 @@ public abstract class TowerScript : MonoBehaviour
     [SerializeField] protected float damageOverride;
     [SerializeField] protected float towerTierDamageMultiplier;
 
-    protected List<GameObject> enemiesAll = new List<GameObject>();
-    protected List<GameObject> enemiesInRadius = new List<GameObject>();
+    protected GameObject[] enemiesAll;
+    protected List<GameObject> enemiesInRadius = new();
 
     protected bool canFire = false;
 
@@ -38,12 +38,13 @@ public abstract class TowerScript : MonoBehaviour
     protected void GetGameObjectsInRadius()
     {
         enemiesInRadius.Clear();
-        foreach (GameObject en in enemiesAll)
+
+        for(int i = 0; i < enemiesAll.Length; i++)
         {
-            float distance = (transform.position - en.transform.position).magnitude;
+            float distance = (transform.position - enemiesAll[i].transform.position).magnitude;
             if (distance < range)
             {
-                enemiesInRadius.Add(en);
+                enemiesInRadius.Add(enemiesAll[i]);
             }
         }
 
@@ -80,6 +81,7 @@ public abstract class TowerScript : MonoBehaviour
                 proj.GetComponent<ProjectileScript>().Spawn();
                 proj.GetComponent<ProjectileScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
                 proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
                 //direction vector3
                 Vector3 dir = (enemiesInRadius[0].transform.position - proj.transform.position).normalized * 10f + enemiesInRadius[0].transform.forward * -0.25f;
 
