@@ -31,6 +31,7 @@ Transform:
   m_LocalRotation: {x: 0.00000023841855, y: 0.12820429, z: -0.00000001862645, w: 0.9917478}
   m_LocalPosition: {x: 0.59451574, y: 0.99999744, z: -22.2}
   m_LocalScale: {x: 0.04, y: 0.04, z: 0.04}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -54,6 +55,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -111,9 +113,9 @@ Rigidbody:
   m_AngularDrag: 0.5
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!65 &4459708395376220638
 BoxCollider:
   m_ObjectHideFlags: 0

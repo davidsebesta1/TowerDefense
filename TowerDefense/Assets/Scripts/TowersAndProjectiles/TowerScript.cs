@@ -5,13 +5,16 @@ using UnityEngine;
 
 public abstract class TowerScript : MonoBehaviour
 {
+    [Header("Properties")]
     [SerializeField] protected float fireRate;
     [SerializeField] protected float range;
 
+    [Header("Game Objects")]
     [SerializeField] protected GameObject projectile;
     [SerializeField] protected GameObject rotatingPart;
     [SerializeField] protected GameObject muzzleFlash;
 
+    [Header("Overrides")]
     [SerializeField] protected float damageOverride;
     [SerializeField] protected float towerTierDamageMultiplier;
 
@@ -77,30 +80,19 @@ public abstract class TowerScript : MonoBehaviour
                 proj.GetComponent<ProjectileScript>().Spawn();
                 proj.GetComponent<ProjectileScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
                 proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                try
-                {
-                    //direction vector3
-                    Vector3 dir = (enemiesInRadius[0].transform.position - proj.transform.position).normalized * 10f + enemiesInRadius[0].transform.forward * -0.25f;
+                //direction vector3
+                Vector3 dir = (enemiesInRadius[0].transform.position - proj.transform.position).normalized * 10f + enemiesInRadius[0].transform.forward * -0.25f;
 
-                    //making projectile look towards enemy
-                    proj.transform.LookAt(enemiesInRadius[0].transform);
+                //making projectile look towards enemy
+                proj.transform.LookAt(enemiesInRadius[0].transform);
 
-                    //rotation vectors
-                    Vector3 portDir = (enemiesInRadius[0].transform.position - rotatingPart.transform.position + new Vector3(0, 90, 0)).normalized;
-                    Quaternion portRot = Quaternion.LookRotation(portDir);
+                //rotation vectors
+                Vector3 portDir = (enemiesInRadius[0].transform.position - rotatingPart.transform.position + new Vector3(0, 90, 0)).normalized;
+                Quaternion portRot = Quaternion.LookRotation(portDir);
 
-                    //applying force and rotation
-                    rotatingPart.transform.rotation = portRot * Quaternion.Euler(0,0,90);
-                    proj.GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
-                }
-
-                catch (Exception)
-                {
-                    if (op != null)
-                    {
-                        proj.SetActive(false);
-                    }
-                }
+                //applying force and rotation
+                rotatingPart.transform.rotation = portRot * Quaternion.Euler(0, 0, 90);
+                proj.GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
             }
         }
     }

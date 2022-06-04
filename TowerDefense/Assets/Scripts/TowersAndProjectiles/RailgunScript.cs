@@ -19,14 +19,16 @@ public class RailgunScript : TowerScript
                 proj.GetComponent<ProjectileScript>().Spawn();
                 proj.GetComponent<ProjectileScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
                 proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+                //create sound player
+                audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 1, true, 12);
+                audioPlayer.GetComponent<AudioSource>().volume = 0.25f;
+
+                //particles
+                muzzleFlash.GetComponent<ParticleSystem>().Play();
+
                 try
                 {
-                    //create sound player
-                    audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 1, true, 12);
-                    audioPlayer.GetComponent<AudioSource>().volume = 0.25f;
-
-                    //particles
-                    muzzleFlash.GetComponent<ParticleSystem>().Play();
 
                     //direction vector3
                     Vector3 dir = (enemiesInRadius[0].transform.position - proj.transform.position).normalized * 15f;

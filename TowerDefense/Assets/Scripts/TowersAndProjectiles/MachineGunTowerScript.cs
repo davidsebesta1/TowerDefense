@@ -25,16 +25,17 @@ public class MachineGunTowerScript : TowerScript
                     proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
                     proj.GetComponent<ProjectileScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
                     GetGameObjectsInRadius();
+
+                    //create sound player
+                    audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 2, true, 10);
+                    audioPlayer.GetComponent<AudioSource>().volume = 0.2f + UnityEngine.Random.Range(-0.1f, 0.1f);
+
+                    //particles
+                    muzzleFlash.GetComponent<ParticleSystem>().Play();
+
+                    //direction vector 3
                     try
                     {
-                        //create sound player
-                        audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 2, true, 10);
-                        audioPlayer.GetComponent<AudioSource>().volume = 0.2f + UnityEngine.Random.Range(-0.1f, 0.1f);
-
-                        //particles
-                        muzzleFlash.GetComponent<ParticleSystem>().Play();
-
-                        //direction vector 3
                         Vector3 dir = (enemiesInRadius[0].transform.position - proj.transform.position).normalized * 10f + enemiesInRadius[0].transform.forward * -0.25f;
 
                         //look at enemy

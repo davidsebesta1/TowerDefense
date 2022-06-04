@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    private bool isGameActive = false;
-    private int wave = 0;
     [SerializeField] private GameObject spawnPoint;
     [SerializeField] private GameObject[] enemies;
+
+    private bool isGameActive = false;
+    private int wave = 0;
+
+    private ObjectPooler op;
 
     public void StartGame()
     {
         isGameActive = true;
+        op = FindObjectOfType<ObjectPooler>();
         StartCoroutine(SpawnNextWave());
         StartCoroutine(AutomaticNextWaveCounter());
     }
@@ -34,19 +38,28 @@ public class SpawnManager : MonoBehaviour
             {
 
                 //speedy
-                Instantiate(enemies[1], spawnPoint.transform.position, enemies[1].transform.rotation);
+                GameObject enemy = op.GetEnemySpeed();
+                enemy.GetComponent<EnemySpeedScript>().Spawn();
+                enemy.transform.position = spawnPoint.transform.position;
+                enemy.transform.rotation = enemies[1].transform.rotation;
                 i += 2;
             }
             else if (randomIndex == 2 && wave >= 20)
             {
                 //tank
-                Instantiate(enemies[2], spawnPoint.transform.position, enemies[2].transform.rotation);
+                GameObject enemy = op.GetEnemyTank();
+                enemy.GetComponent<EnemyTankScript>().Spawn();
+                enemy.transform.position = spawnPoint.transform.position;
+                enemy.transform.rotation = enemies[1].transform.rotation;
                 i += 3;
             }
             else
             {
                 //basic
-                Instantiate(enemies[0], spawnPoint.transform.position, enemies[0].transform.rotation);
+                GameObject enemy = op.GetEnemyBasic();
+                enemy.GetComponent<EnemyBasicScript>().Spawn();
+                enemy.transform.position = spawnPoint.transform.position;
+                enemy.transform.rotation = enemies[1].transform.rotation;
                 i++;
             }
 
@@ -57,10 +70,11 @@ public class SpawnManager : MonoBehaviour
     {
         while (isGameActive)
         {
-            if(wave < 10)
+            if (wave < 10)
             {
                 yield return new WaitForSeconds(wave * 2f);
-            } else
+            }
+            else
             {
                 yield return new WaitForSeconds(wave * 0.6f);
             }

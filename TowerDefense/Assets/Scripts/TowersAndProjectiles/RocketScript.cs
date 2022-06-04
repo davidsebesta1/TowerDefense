@@ -25,7 +25,7 @@ public class RocketScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (target != null)
+        if (target != null && target.activeSelf == true)
         {
             Vector3 dir = 5f * Time.deltaTime * (target.transform.position - gameObject.transform.position).normalized;
             transform.up = dir;
