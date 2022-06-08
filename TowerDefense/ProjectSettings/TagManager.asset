@@ -9,6 +9,16 @@ TagManager:
   - Blueprint
   - Tower
   - BuildModePanel
+  - Cloud
+  - Artillery
+  - Path
+  - FxTemporaire
+  - Ground
+  - Rock
+  - Cannon
+  - Minigun
+  - Railgun
+  - MissileLauncher
   layers:
   - Default
   - TransparentFX

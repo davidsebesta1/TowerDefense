@@ -8,12 +8,19 @@ public class TileScript : MonoBehaviour
     [SerializeField] private GameObject[] towerTemplates;
     [SerializeField] private GameObject[] towerObjects;
 
+    [SerializeField] private GameObject[] cannonBasicPrefabs;
+    [SerializeField] private GameObject[] minigunPrefabs;
+
     private GameObject playerCamera;
     private PlayerController playerController;
+
+    private GameObject tower;
 
     private bool isClickedOn = false;
     private bool buildMode = false;
     private bool isOccupied = false;
+
+    private int currectTowerTier = 0;
 
     private void Start()
     {
@@ -35,29 +42,81 @@ public class TileScript : MonoBehaviour
         Destroy(GameObject.FindGameObjectWithTag("Blueprint"));
     }
 
+    public void UpgradeTower()
+    {
+        Debug.Log(gameObject.name);
+        switch (tower.tag)
+        {
+            case "Cannon":
+                if(currectTowerTier < 3)
+                {
+                    Destroy(tower);
+                    currectTowerTier++;
+                    tower = Instantiate(cannonBasicPrefabs[currectTowerTier], transform.position + new Vector3(0, 0.1f, 0), cannonBasicPrefabs[currectTowerTier].transform.rotation);
+                }
+                break;
+            case "Minigun":
+                if (currectTowerTier < 3)
+                {
+                    Destroy(tower);
+                    currectTowerTier++;
+                    tower = Instantiate(minigunPrefabs[currectTowerTier], transform.position + new Vector3(0, 0.1f, 0), minigunPrefabs[currectTowerTier].transform.rotation);
+                }
+                break;
+        }
+    }
+
     public void BuildTower(int id)
     {
         if (buildMode && !isOccupied)
         {
             Debug.Log("id: " + id);
+            var PlrControl = playerCamera.GetComponent<PlayerController>();
             switch (id)
             {
                 case 0:
-                    if (playerCamera.GetComponent<PlayerController>().GetMoneyAmount() >= 20)
+                    if (PlrControl.GetMoneyAmount() >= 20) // basic tower
                     {
-                        isOccupied = true;
-                        Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
-                        playerCamera.GetComponent<PlayerController>().AddMoneyAmount(-20);
+                        PlrControl.AddMoneyAmount(-20);
                         HideBlueprint();
+                        isOccupied = true;
+                        tower = Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
                     }
                     break;
                 case 1:
-                    if (playerCamera.GetComponent<PlayerController>().GetMoneyAmount() >= 75)
+                    if (PlrControl.GetMoneyAmount() >= 75) // machine gun
                     {
-                        isOccupied = true;
-                        Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
-                        playerCamera.GetComponent<PlayerController>().AddMoneyAmount(-75);
+                        PlrControl.AddMoneyAmount(-75);
                         HideBlueprint();
+                        isOccupied = true;
+                        tower = Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
+                    }
+                    break;
+                case 2:
+                    if (PlrControl.GetMoneyAmount() >= 200) // rail gun
+                    {
+                        PlrControl.AddMoneyAmount(-200);
+                        HideBlueprint();
+                        isOccupied = true;
+                        tower = Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
+                    }
+                    break;
+                case 3:
+                    if (PlrControl.GetMoneyAmount() >= 350) // rail gun
+                    {
+                        PlrControl.AddMoneyAmount(-350);
+                        HideBlueprint();
+                        isOccupied = true;
+                        tower = Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
+                    }
+                    break;
+                case 4:
+                    if (PlrControl.GetMoneyAmount() >= 550) // artillery
+                    {
+                        PlrControl.AddMoneyAmount(-550);
+                        HideBlueprint();
+                        isOccupied = true;
+                        tower = Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
                     }
                     break;
             }
@@ -66,30 +125,38 @@ public class TileScript : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        isClickedOn = true;
-        buildMode = playerController.GetBuildMode();
-
-        if (playerController.GetSelectedTile() != null)
+        if (!playerController.GetUpgradeMenuOpen())
         {
-            playerController.GetSelectedTile().gameObject.GetComponent<TileScript>().HideBlueprint();
-        }
+            isClickedOn = true;
+            buildMode = playerController.GetBuildMode();
 
-        playerController.SetSelectedTile(this.gameObject);
+            if (playerController.GetSelectedTile() != null)
+            {
+                playerController.GetSelectedTile().GetComponent<TileScript>().HideBlueprint();
+            }
 
-        if (!isOccupied)
-        {
-            ShowBlueprint(playerController.GetSelectedTowerID());
-        }
+            playerController.SetSelectedTile(this.gameObject);
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !isOccupied)
-        {
-            Debug.Log("Building tower");
-            BuildTower(playerController.GetSelectedTowerID());
+            if (!isOccupied)
+            {
+                ShowBlueprint(playerController.GetSelectedTowerID());
+            }
+
+            if (Input.GetKeyDown(KeyCode.Mouse0) && !isOccupied)
+            {
+                Debug.Log("Building tower");
+                BuildTower(playerController.GetSelectedTowerID());
+            }
         }
     }
 
     private void OnMouseExit()
     {
         isClickedOn = false;
+    }
+
+    public GameObject GetTower()
+    {
+        return tower;
     }
 }

@@ -7,29 +7,75 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
+    //Serialized Variables
     [SerializeField] private float speed;
+
     [SerializeField] private CanvasRenderer BuildPanel;
+    [SerializeField] private CanvasRenderer ArtyPanel;
+    [SerializeField] private CanvasRenderer UpgradeMenu;
     [SerializeField] private Button startButton;
+    [SerializeField] private Button restartButton;
 
+    [SerializeField] private TextMeshProUGUI towerNameLabel;
+    [SerializeField] private TextMeshProUGUI towerLevelLabel;
+    [SerializeField] private TextMeshProUGUI towerCostUpgradeLabel;
+    [SerializeField] private TextMeshProUGUI towerDamageLabel;
+    [SerializeField] private TextMeshProUGUI towerFireRateLabel;
+    [SerializeField] private TextMeshProUGUI towerRangeLabel;
+
+    [SerializeField] private GameObject artyTargetPrefab;
+
+    //Rigidbody
+    private Rigidbody rb;
+
+    //Selections
     private GameObject selectedTile;
+    private GameObject selectedArty;
 
+    //Inputs
     private float horizontalInput;
     private float verticalInput;
+
     private int selectedTowerID = 0;
 
-    private int money = 99999;
+    //Money
+    private int money = 150;
 
     private int UILayer;
 
+    //Bool stuff
     private bool buildMode = false;
     private bool isGameActive = false;
-    private bool isOverBuildModePanel = false;
+    private bool isOverUIElement = false;
+    private bool artySelectionMode = false;
+    private bool upgradeMenuOpen = false;
+
+    //Creative mode bool
+    private readonly bool creativeMode = true;
+
+    private void Start()
+    {
+        rb = gameObject.GetComponent<Rigidbody>();
+        UILayer = LayerMask.NameToLayer("UI");
+
+        if (creativeMode)
+        {
+            this.money = 999999;
+        }
+    }
 
     public void StartGame()
     {
-        UILayer = LayerMask.NameToLayer("UI");
         isGameActive = true;
         startButton.gameObject.SetActive(false);
+    }
+
+    public void EndGame()
+    {
+        isGameActive = false;
+        verticalInput = 0f;
+        horizontalInput = 0f;
+        restartButton.gameObject.SetActive(true);
     }
 
     private void Update()
@@ -38,9 +84,8 @@ public class PlayerController : MonoBehaviour
         {
             horizontalInput = Input.GetAxis("Horizontal");
             verticalInput = Input.GetAxis("Vertical");
-            isOverBuildModePanel = IsPointerOverUIElement();
 
-            if (Input.GetKeyDown(KeyCode.B))
+            if (Input.GetKeyDown(KeyCode.B) && !upgradeMenuOpen) // build mode
             {
                 if (buildMode)
                 {
@@ -54,19 +99,109 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (Input.GetMouseButtonDown(0))
+            isOverUIElement = IsPointerOverUIElement();
+            if (Input.GetMouseButtonDown(0) && !isOverUIElement)
             {
-                RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit, 100.0f))
+                if (Physics.Raycast(ray, out RaycastHit hit, 100.0f))
                 {
-                    if (hit.collider.gameObject.CompareTag("Tile") && !isOverBuildModePanel)
+
+                    var GameObj = hit.collider.gameObject;
+
+                    if (GameObj.CompareTag("Artillery") && !buildMode) // artillery panel
                     {
-                        hit.collider.gameObject.GetComponent<TileScript>().BuildTower(selectedTowerID);
+                        selectedArty = GameObj.transform.parent.gameObject.GetComponentInChildren<ArtilleryScript>().gameObject;
+                        ArtyPanel.gameObject.SetActive(true);
+                        SetArtySelectionMode(true);
+                    }
+
+                    if (GameObj.CompareTag("Tile") && !buildMode) // tile stuff
+                    {
+                        Debug.Log(GameObj.name);
+                        if (GameObj.GetComponent<TileScript>().GetTower() != null) // upgrade menu
+                        {
+                            if (upgradeMenuOpen)
+                            {
+                                selectedTile = null;
+                                upgradeMenuOpen = false;
+                                UpgradeMenu.gameObject.SetActive(false);
+                            }
+                            else
+                            {
+                                selectedTile = GameObj;
+                                upgradeMenuOpen = true;
+                                UpgradeMenu.gameObject.SetActive(true);
+
+                                var tower = GameObj.GetComponent<TileScript>().GetTower();
+
+                                UpdateUpgradeMenuText(tower);
+
+                            }
+                        }
+                    }
+
+                    if (GameObj.CompareTag("Tile") && buildMode) // building tower
+                    {
+                        GameObj.GetComponent<TileScript>().BuildTower(selectedTowerID);
+                    }
+
+                    if (GameObj.CompareTag("Path") && artySelectionMode) // arty target
+                    {
+                        Vector3 localHit = hit.point;
+                        selectedArty.GetComponent<ArtilleryScript>().SetTarget(Instantiate(artyTargetPrefab, localHit + new Vector3(0, 0.01f, 0), Quaternion.Euler(90, 0, 0)));
+
+                        SetArtySelectionMode(false);
+                        ArtyPanel.gameObject.SetActive(false);
                     }
                 }
             }
         }
+
+        if (gameObject.transform.position.x > 20f)
+        {
+            horizontalInput += -1.5f;
+        }
+
+        if (gameObject.transform.position.x < 0f)
+        {
+            horizontalInput += 1.5f;
+        }
+
+        if (gameObject.transform.position.z > 25f)
+        {
+            verticalInput += -1.5f;
+        }
+
+        if (gameObject.transform.position.z < 0f)
+        {
+            verticalInput += 1.5f;
+        }
+    }
+
+    public void UpgradeSelectedTower()
+    {
+        var tower = selectedTile.GetComponent<TileScript>().GetTower();
+
+        switch (tower.tag)
+        {
+            case "Cannon":
+                if (money >= tower.GetComponentInChildren<BasicTowerScript>().GetCost())
+                {
+                    selectedTile.GetComponent<TileScript>().UpgradeTower();
+                    AddMoneyAmount(-tower.GetComponentInChildren<BasicTowerScript>().GetCost());
+                }
+             break;
+
+            case "Minigun":
+                if (money >= tower.GetComponentInChildren<MachineGunTowerScript>().GetCost())
+                {
+                    selectedTile.GetComponent<TileScript>().UpgradeTower();
+                    AddMoneyAmount(-tower.GetComponentInChildren<MachineGunTowerScript>().GetCost());
+                }
+                break;
+        }
+
+        UpdateUpgradeMenuText(selectedTile.GetComponent<TileScript>().GetTower());
     }
 
     public bool IsPointerOverUIElement()
@@ -88,9 +223,11 @@ public class PlayerController : MonoBehaviour
 
     static List<RaycastResult> GetEventSystemRaycastResults()
     {
-        PointerEventData eventData = new PointerEventData(EventSystem.current);
-        eventData.position = Input.mousePosition;
-        List<RaycastResult> raysastResults = new List<RaycastResult>();
+        PointerEventData eventData = new(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+        List<RaycastResult> raysastResults = new();
         EventSystem.current.RaycastAll(eventData, raysastResults);
         return raysastResults;
     }
@@ -98,8 +235,38 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        Vector3 dir = new Vector3(horizontalInput * speed * Time.deltaTime, verticalInput * speed * Time.deltaTime, 0);
-        transform.Translate(dir);
+        Vector3 dir = speed * Time.deltaTime * new Vector3(horizontalInput, 0, verticalInput);
+        rb.AddForce(dir, ForceMode.Impulse);
+    }
+
+    private void UpdateUpgradeMenuText(GameObject tower)
+    {
+        switch (tower.tag)
+        {
+            case "Cannon":
+                var towerScript = tower.GetComponentInChildren<BasicTowerScript>();
+
+                towerNameLabel.text = "Cannon";
+
+                towerCostUpgradeLabel.text = "Cost Upgrade: " + towerScript.GetCost();
+                towerDamageLabel.text = "Damage:  " + towerScript.GetDamageOverride();
+                towerFireRateLabel.text = "Firerate:" + towerScript.GetFireRate();
+                towerLevelLabel.text = "Tower: " + towerScript.GetTowerLevel();
+                towerRangeLabel.text = "Range: " + towerScript.GetRange();
+                break;
+
+            case "Minigun":
+                var towerScript2 = tower.GetComponentInChildren<MachineGunTowerScript>();
+
+                towerNameLabel.text = "Machine Gun";
+
+                towerCostUpgradeLabel.text = "Cost Upgrade: " + towerScript2.GetCost();
+                towerDamageLabel.text = "Damage:  " + towerScript2.GetDamageOverride();
+                towerFireRateLabel.text = "Firerate:" + towerScript2.GetFireRate();
+                towerLevelLabel.text = "Tower: " + towerScript2.GetTowerLevel();
+                towerRangeLabel.text = "Range: " + towerScript2.GetRange();
+                break;
+        }
     }
 
     public void SetSelectedTile(GameObject tile)
@@ -135,5 +302,19 @@ public class PlayerController : MonoBehaviour
     public void AddMoneyAmount(int add)
     {
         money += add;
+    }
+
+    public void SetArtySelectionMode(bool newMode)
+    {
+        this.artySelectionMode = newMode;
+        if (selectedArty != null)
+        {
+            selectedArty.GetComponent<ArtilleryScript>().SetEditMode(newMode);
+        }
+    }
+
+    public bool GetUpgradeMenuOpen()
+    {
+        return upgradeMenuOpen;
     }
 }

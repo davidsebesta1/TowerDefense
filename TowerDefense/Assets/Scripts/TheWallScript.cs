@@ -11,7 +11,7 @@ public class TheWallScript : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             gameManager.GetComponent<GameManager>().WallDamage((int) Mathf.Round(other.gameObject.GetComponent<EnemyScript>().GetHealth()));
-            Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
         }
     }
 }
