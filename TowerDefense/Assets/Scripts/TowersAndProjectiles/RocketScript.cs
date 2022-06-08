@@ -8,9 +8,11 @@ public class RocketScript : MonoBehaviour
     [SerializeField] private ParticleSystem impactParticles;
 
     private GameObject target;
+    private GameObject audioPlayer;
     private ObjectPooler op;
 
     private Rigidbody rb;
+
 
     private void Start()
     {
@@ -44,6 +46,9 @@ public class RocketScript : MonoBehaviour
         {
             ParticleSystem explosion = Instantiate(impactParticles, transform.position + new Vector3(0, 0.1f, 0), Quaternion.Euler(-90, 0, 0));
             explosion.GetComponent<ParticleSystem>().Play();
+
+            audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 8, true, 10);
+            audioPlayer.GetComponent<AudioSource>().volume = 0.2f + UnityEngine.Random.Range(-0.1f, 0.1f);
 
             Collider[] collided = Physics.OverlapSphere(transform.position, 0.5f);
 

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class MachineGunTowerScript : TowerScript
 {
+    [SerializeField] private int fireCycleAmount = 3;
     protected override IEnumerator FireCountdown()
     {
         while (true)
@@ -14,7 +15,7 @@ public class MachineGunTowerScript : TowerScript
             GetGameObjectsInRadius();
             if (canFire)
             {
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < fireCycleAmount; i++)
                 {
                     yield return new WaitForSeconds(0.1f);
 

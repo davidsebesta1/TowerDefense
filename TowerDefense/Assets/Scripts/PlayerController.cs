@@ -12,8 +12,16 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private CanvasRenderer BuildPanel;
     [SerializeField] private CanvasRenderer ArtyPanel;
+    [SerializeField] private CanvasRenderer UpgradeMenu;
     [SerializeField] private Button startButton;
     [SerializeField] private Button restartButton;
+
+    [SerializeField] private TextMeshProUGUI towerNameLabel;
+    [SerializeField] private TextMeshProUGUI towerLevelLabel;
+    [SerializeField] private TextMeshProUGUI towerCostUpgradeLabel;
+    [SerializeField] private TextMeshProUGUI towerDamageLabel;
+    [SerializeField] private TextMeshProUGUI towerFireRateLabel;
+    [SerializeField] private TextMeshProUGUI towerRangeLabel;
 
     [SerializeField] private GameObject artyTargetPrefab;
 
@@ -38,8 +46,9 @@ public class PlayerController : MonoBehaviour
     //Bool stuff
     private bool buildMode = false;
     private bool isGameActive = false;
-    private bool isOverBuildModePanel = false;
+    private bool isOverUIElement = false;
     private bool artySelectionMode = false;
+    private bool upgradeMenuOpen = false;
 
     //Creative mode bool
     private readonly bool creativeMode = true;
@@ -75,9 +84,8 @@ public class PlayerController : MonoBehaviour
         {
             horizontalInput = Input.GetAxis("Horizontal");
             verticalInput = Input.GetAxis("Vertical");
-            isOverBuildModePanel = IsPointerOverUIElement();
 
-            if (Input.GetKeyDown(KeyCode.B))
+            if (Input.GetKeyDown(KeyCode.B) && !upgradeMenuOpen) // build mode
             {
                 if (buildMode)
                 {
@@ -91,24 +99,53 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (Input.GetMouseButtonDown(0))
+            isOverUIElement = IsPointerOverUIElement();
+            if (Input.GetMouseButtonDown(0) && !isOverUIElement)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hit, 100.0f))
                 {
-                    if (hit.collider.gameObject.CompareTag("Artillery") && !isOverBuildModePanel)
+
+                    var GameObj = hit.collider.gameObject;
+
+                    if (GameObj.CompareTag("Artillery") && !buildMode) // artillery panel
                     {
-                        selectedArty = hit.collider.gameObject.transform.parent.gameObject.GetComponentInChildren<ArtilleryScript>().gameObject;
+                        selectedArty = GameObj.transform.parent.gameObject.GetComponentInChildren<ArtilleryScript>().gameObject;
                         ArtyPanel.gameObject.SetActive(true);
                         SetArtySelectionMode(true);
                     }
 
-                    if (hit.collider.gameObject.CompareTag("Tile") && !isOverBuildModePanel)
+                    if (GameObj.CompareTag("Tile") && !buildMode) // tile stuff
                     {
-                        hit.collider.gameObject.GetComponent<TileScript>().BuildTower(selectedTowerID);
+                        Debug.Log(GameObj.name);
+                        if (GameObj.GetComponent<TileScript>().GetTower() != null) // upgrade menu
+                        {
+                            if (upgradeMenuOpen)
+                            {
+                                selectedTile = null;
+                                upgradeMenuOpen = false;
+                                UpgradeMenu.gameObject.SetActive(false);
+                            }
+                            else
+                            {
+                                selectedTile = GameObj;
+                                upgradeMenuOpen = true;
+                                UpgradeMenu.gameObject.SetActive(true);
+
+                                var tower = GameObj.GetComponent<TileScript>().GetTower();
+
+                                UpdateUpgradeMenuText(tower);
+
+                            }
+                        }
                     }
 
-                    if (hit.collider.gameObject.CompareTag("Path") && !isOverBuildModePanel && artySelectionMode)
+                    if (GameObj.CompareTag("Tile") && buildMode) // building tower
+                    {
+                        GameObj.GetComponent<TileScript>().BuildTower(selectedTowerID);
+                    }
+
+                    if (GameObj.CompareTag("Path") && artySelectionMode) // arty target
                     {
                         Vector3 localHit = hit.point;
                         selectedArty.GetComponent<ArtilleryScript>().SetTarget(Instantiate(artyTargetPrefab, localHit + new Vector3(0, 0.01f, 0), Quaternion.Euler(90, 0, 0)));
@@ -120,12 +157,12 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(gameObject.transform.position.x > 20f)
+        if (gameObject.transform.position.x > 20f)
         {
             horizontalInput += -1.5f;
         }
 
-        if(gameObject.transform.position.x < 0f)
+        if (gameObject.transform.position.x < 0f)
         {
             horizontalInput += 1.5f;
         }
@@ -139,6 +176,32 @@ public class PlayerController : MonoBehaviour
         {
             verticalInput += 1.5f;
         }
+    }
+
+    public void UpgradeSelectedTower()
+    {
+        var tower = selectedTile.GetComponent<TileScript>().GetTower();
+
+        switch (tower.tag)
+        {
+            case "Cannon":
+                if (money >= tower.GetComponentInChildren<BasicTowerScript>().GetCost())
+                {
+                    selectedTile.GetComponent<TileScript>().UpgradeTower();
+                    AddMoneyAmount(-tower.GetComponentInChildren<BasicTowerScript>().GetCost());
+                }
+             break;
+
+            case "Minigun":
+                if (money >= tower.GetComponentInChildren<MachineGunTowerScript>().GetCost())
+                {
+                    selectedTile.GetComponent<TileScript>().UpgradeTower();
+                    AddMoneyAmount(-tower.GetComponentInChildren<MachineGunTowerScript>().GetCost());
+                }
+                break;
+        }
+
+        UpdateUpgradeMenuText(selectedTile.GetComponent<TileScript>().GetTower());
     }
 
     public bool IsPointerOverUIElement()
@@ -174,6 +237,36 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 dir = speed * Time.deltaTime * new Vector3(horizontalInput, 0, verticalInput);
         rb.AddForce(dir, ForceMode.Impulse);
+    }
+
+    private void UpdateUpgradeMenuText(GameObject tower)
+    {
+        switch (tower.tag)
+        {
+            case "Cannon":
+                var towerScript = tower.GetComponentInChildren<BasicTowerScript>();
+
+                towerNameLabel.text = "Cannon";
+
+                towerCostUpgradeLabel.text = "Cost Upgrade: " + towerScript.GetCost();
+                towerDamageLabel.text = "Damage:  " + towerScript.GetDamageOverride();
+                towerFireRateLabel.text = "Firerate:" + towerScript.GetFireRate();
+                towerLevelLabel.text = "Tower: " + towerScript.GetTowerLevel();
+                towerRangeLabel.text = "Range: " + towerScript.GetRange();
+                break;
+
+            case "Minigun":
+                var towerScript2 = tower.GetComponentInChildren<MachineGunTowerScript>();
+
+                towerNameLabel.text = "Machine Gun";
+
+                towerCostUpgradeLabel.text = "Cost Upgrade: " + towerScript2.GetCost();
+                towerDamageLabel.text = "Damage:  " + towerScript2.GetDamageOverride();
+                towerFireRateLabel.text = "Firerate:" + towerScript2.GetFireRate();
+                towerLevelLabel.text = "Tower: " + towerScript2.GetTowerLevel();
+                towerRangeLabel.text = "Range: " + towerScript2.GetRange();
+                break;
+        }
     }
 
     public void SetSelectedTile(GameObject tile)
@@ -214,10 +307,14 @@ public class PlayerController : MonoBehaviour
     public void SetArtySelectionMode(bool newMode)
     {
         this.artySelectionMode = newMode;
-       if(selectedArty != null)
+        if (selectedArty != null)
         {
-            Debug.Log(selectedArty.name);
             selectedArty.GetComponent<ArtilleryScript>().SetEditMode(newMode);
         }
+    }
+
+    public bool GetUpgradeMenuOpen()
+    {
+        return upgradeMenuOpen;
     }
 }

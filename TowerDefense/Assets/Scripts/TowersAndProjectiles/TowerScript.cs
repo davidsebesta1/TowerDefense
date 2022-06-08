@@ -8,6 +8,7 @@ public abstract class TowerScript : MonoBehaviour
     [Header("Properties")]
     [SerializeField] protected float fireRate;
     [SerializeField] protected float range;
+    [SerializeField] protected int cost = 1;
 
     [Header("Game Objects")]
     [SerializeField] protected GameObject projectile;
@@ -16,10 +17,14 @@ public abstract class TowerScript : MonoBehaviour
 
     [Header("Overrides")]
     [SerializeField] protected float damageOverride;
-    [SerializeField] protected float towerTierDamageMultiplier;
+
+    [SerializeField] protected float towerTierDamageMultiplier = 1;
+
+    [SerializeField] protected int towerLevel = 1;
+
 
     protected GameObject[] enemiesAll;
-    protected List<GameObject> enemiesInRadius = new();
+    protected List<GameObject> enemiesInRadius = new List<GameObject>();
 
     protected bool canFire = false;
 
@@ -37,26 +42,54 @@ public abstract class TowerScript : MonoBehaviour
 
     protected void GetGameObjectsInRadius()
     {
-        enemiesInRadius.Clear();
-
-        for(int i = 0; i < enemiesAll.Length; i++)
+        if (enemiesAll != null)
         {
-            float distance = (transform.position - enemiesAll[i].transform.position).magnitude;
-            if (distance < range)
+            enemiesInRadius.Clear();
+            for (int i = 0; i < enemiesAll.Length; i++)
             {
-                enemiesInRadius.Add(enemiesAll[i]);
+                float distance = (transform.position - enemiesAll[i].transform.position).magnitude;
+                if (distance < range)
+                {
+                    enemiesInRadius.Add(enemiesAll[i]);
+                }
+            }
+
+            if (enemiesInRadius.Count > 0)
+            {
+                canFire = true;
+            }
+            else
+            {
+                canFire = false;
             }
         }
-
-        if (enemiesInRadius.Count > 0)
-        {
-            canFire = true;
-        }
-        else
-        {
-            canFire = false;
-        }
     }
+
+    public float GetRange()
+    {
+        return this.range;
+    }
+
+    public float GetDamageOverride()
+    {
+        return this.towerTierDamageMultiplier * damageOverride;
+    }
+
+    public float GetFireRate()
+    {
+        return this.fireRate;
+    }
+
+    public int GetTowerLevel()
+    {
+        return this.towerLevel;
+    }
+
+    public int GetCost()
+    {
+        return this.cost;
+    }
+
 
     protected virtual IEnumerator FireCountdown()
     {
@@ -83,7 +116,7 @@ public abstract class TowerScript : MonoBehaviour
                 proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
                 //direction vector3
-                Vector3 dir = (enemiesInRadius[0].transform.position - proj.transform.position).normalized * 10f + enemiesInRadius[0].transform.forward * -0.25f;
+                Vector3 dir = -0.25f * enemiesInRadius[0].transform.forward + 10f * (enemiesInRadius[0].transform.position - proj.transform.position).normalized;
 
                 //making projectile look towards enemy
                 proj.transform.LookAt(enemiesInRadius[0].transform);

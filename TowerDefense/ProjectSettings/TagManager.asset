@@ -15,6 +15,10 @@ TagManager:
   - FxTemporaire
   - Ground
   - Rock
+  - Cannon
+  - Minigun
+  - Railgun
+  - MissileLauncher
   layers:
   - Default
   - TransparentFX
