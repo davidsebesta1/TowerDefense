@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class RocketLauncherScript : TowerScript
 {
+    [SerializeField] private int fireAmount = 1;
     protected override IEnumerator FireCountdown()
     {
         while (true)
@@ -14,7 +15,7 @@ public class RocketLauncherScript : TowerScript
             GetGameObjectsInRadius();
             if (canFire)
             {
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < fireAmount; i++)
                 {
                     yield return new WaitForSeconds(0.25f);
                     GameObject proj = op.GetRocket();

@@ -10,6 +10,9 @@ public class TileScript : MonoBehaviour
 
     [SerializeField] private GameObject[] cannonBasicPrefabs;
     [SerializeField] private GameObject[] minigunPrefabs;
+    [SerializeField] private GameObject[] railgunPrefabs;
+    [SerializeField] private GameObject[] missileLauncherPrefabs;
+    [SerializeField] private GameObject[] artyPrefabs;
 
     private GameObject playerCamera;
     private PlayerController playerController;
@@ -48,7 +51,7 @@ public class TileScript : MonoBehaviour
         switch (tower.tag)
         {
             case "Cannon":
-                if(currectTowerTier < 3)
+                if (currectTowerTier < 3)
                 {
                     Destroy(tower);
                     currectTowerTier++;
@@ -61,6 +64,32 @@ public class TileScript : MonoBehaviour
                     Destroy(tower);
                     currectTowerTier++;
                     tower = Instantiate(minigunPrefabs[currectTowerTier], transform.position + new Vector3(0, 0.1f, 0), minigunPrefabs[currectTowerTier].transform.rotation);
+                }
+                break;
+            case "Railgun":
+                if (currectTowerTier < 3)
+                {
+                    Destroy(tower);
+                    currectTowerTier++;
+                    tower = Instantiate(railgunPrefabs[currectTowerTier], transform.position + new Vector3(0, 0.1f, 0), railgunPrefabs[currectTowerTier].transform.rotation);
+                }
+                break;
+
+            case "MissileLauncher":
+                if (currectTowerTier < 3)
+                {
+                    Destroy(tower);
+                    currectTowerTier++;
+                    tower = Instantiate(missileLauncherPrefabs[currectTowerTier], transform.position + new Vector3(0, 0.1f, 0), missileLauncherPrefabs[currectTowerTier].transform.rotation);
+                }
+                break;
+
+            case "Artillery":
+                if (currectTowerTier < 3)
+                {
+                    Destroy(tower);
+                    currectTowerTier++;
+                    tower = Instantiate(artyPrefabs[currectTowerTier], transform.position + new Vector3(0, 0.1f, 0), artyPrefabs[currectTowerTier].transform.rotation);
                 }
                 break;
         }
@@ -80,7 +109,7 @@ public class TileScript : MonoBehaviour
                         PlrControl.AddMoneyAmount(-20);
                         HideBlueprint();
                         isOccupied = true;
-                        tower = Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
+                        tower = Instantiate(cannonBasicPrefabs[0], transform.position + new Vector3(0, 0.1f, 0), cannonBasicPrefabs[0].transform.rotation);
                     }
                     break;
                 case 1:
@@ -89,7 +118,7 @@ public class TileScript : MonoBehaviour
                         PlrControl.AddMoneyAmount(-75);
                         HideBlueprint();
                         isOccupied = true;
-                        tower = Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
+                        tower = Instantiate(minigunPrefabs[0], transform.position + new Vector3(0, 0.1f, 0), minigunPrefabs[0].transform.rotation);
                     }
                     break;
                 case 2:
@@ -98,16 +127,16 @@ public class TileScript : MonoBehaviour
                         PlrControl.AddMoneyAmount(-200);
                         HideBlueprint();
                         isOccupied = true;
-                        tower = Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
+                        tower = Instantiate(railgunPrefabs[0], transform.position + new Vector3(0, 0.1f, 0), railgunPrefabs[0].transform.rotation);
                     }
                     break;
                 case 3:
-                    if (PlrControl.GetMoneyAmount() >= 350) // rail gun
+                    if (PlrControl.GetMoneyAmount() >= 350) // rocket launcher
                     {
                         PlrControl.AddMoneyAmount(-350);
                         HideBlueprint();
                         isOccupied = true;
-                        tower = Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
+                        tower = Instantiate(missileLauncherPrefabs[0], transform.position + new Vector3(0, 0.1f, 0), missileLauncherPrefabs[0].transform.rotation);
                     }
                     break;
                 case 4:
@@ -116,7 +145,7 @@ public class TileScript : MonoBehaviour
                         PlrControl.AddMoneyAmount(-550);
                         HideBlueprint();
                         isOccupied = true;
-                        tower = Instantiate(towerObjects[id], transform.position + new Vector3(0, 0.1f, 0), towerObjects[id].transform.rotation);
+                        tower = Instantiate(artyPrefabs[0], transform.position + new Vector3(0, 0.1f, 0), artyPrefabs[0].transform.rotation);
                     }
                     break;
             }

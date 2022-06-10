@@ -11,10 +11,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed;
 
     [SerializeField] private CanvasRenderer BuildPanel;
-    [SerializeField] private CanvasRenderer ArtyPanel;
     [SerializeField] private CanvasRenderer UpgradeMenu;
     [SerializeField] private Button startButton;
     [SerializeField] private Button restartButton;
+    [SerializeField] private Button artyTargetButton;
 
     [SerializeField] private TextMeshProUGUI towerNameLabel;
     [SerializeField] private TextMeshProUGUI towerLevelLabel;
@@ -108,13 +108,6 @@ public class PlayerController : MonoBehaviour
 
                     var GameObj = hit.collider.gameObject;
 
-                    if (GameObj.CompareTag("Artillery") && !buildMode) // artillery panel
-                    {
-                        selectedArty = GameObj.transform.parent.gameObject.GetComponentInChildren<ArtilleryScript>().gameObject;
-                        ArtyPanel.gameObject.SetActive(true);
-                        SetArtySelectionMode(true);
-                    }
-
                     if (GameObj.CompareTag("Tile") && !buildMode) // tile stuff
                     {
                         Debug.Log(GameObj.name);
@@ -125,12 +118,26 @@ public class PlayerController : MonoBehaviour
                                 selectedTile = null;
                                 upgradeMenuOpen = false;
                                 UpgradeMenu.gameObject.SetActive(false);
+
+                                if (GameObj.GetComponent<TileScript>().GetTower().gameObject.CompareTag("Artillery"))
+                                {
+                                    selectedArty = null;
+                                    SetArtySelectionMode(false);
+                                    artyTargetButton.gameObject.SetActive(false);
+                                }
                             }
                             else
                             {
                                 selectedTile = GameObj;
                                 upgradeMenuOpen = true;
                                 UpgradeMenu.gameObject.SetActive(true);
+
+                                if (GameObj.GetComponent<TileScript>().GetTower().CompareTag("Artillery"))
+                                {
+                                    selectedArty = GameObj.GetComponent<TileScript>().GetTower().GetComponentInChildren<ArtilleryScript>().gameObject;
+                                    SetArtySelectionMode(true);
+                                    artyTargetButton.gameObject.SetActive(true);
+                                }
 
                                 var tower = GameObj.GetComponent<TileScript>().GetTower();
 
@@ -151,7 +158,11 @@ public class PlayerController : MonoBehaviour
                         selectedArty.GetComponent<ArtilleryScript>().SetTarget(Instantiate(artyTargetPrefab, localHit + new Vector3(0, 0.01f, 0), Quaternion.Euler(90, 0, 0)));
 
                         SetArtySelectionMode(false);
-                        ArtyPanel.gameObject.SetActive(false);
+
+                        selectedTile = null;
+                        upgradeMenuOpen = false;
+                        UpgradeMenu.gameObject.SetActive(false);
+                        artyTargetButton.gameObject.SetActive(false);
                     }
                 }
             }
@@ -190,13 +201,36 @@ public class PlayerController : MonoBehaviour
                     selectedTile.GetComponent<TileScript>().UpgradeTower();
                     AddMoneyAmount(-tower.GetComponentInChildren<BasicTowerScript>().GetCost());
                 }
-             break;
+                break;
 
             case "Minigun":
                 if (money >= tower.GetComponentInChildren<MachineGunTowerScript>().GetCost())
                 {
                     selectedTile.GetComponent<TileScript>().UpgradeTower();
                     AddMoneyAmount(-tower.GetComponentInChildren<MachineGunTowerScript>().GetCost());
+                }
+                break;
+            case "Railgun":
+                if (money >= tower.GetComponentInChildren<RailgunScript>().GetCost())
+                {
+                    selectedTile.GetComponent<TileScript>().UpgradeTower();
+                    AddMoneyAmount(-tower.GetComponentInChildren<RailgunScript>().GetCost());
+                }
+                break;
+            case "MissileLauncher":
+                if (money >= tower.GetComponentInChildren<RocketLauncherScript>().GetCost())
+                {
+                    selectedTile.GetComponent<TileScript>().UpgradeTower();
+                    AddMoneyAmount(-tower.GetComponentInChildren<RocketLauncherScript>().GetCost());
+                }
+                break;
+            case "Artillery":
+                if (money >= tower.GetComponentInChildren<ArtilleryScript>().GetCost())
+                {
+                    selectedTile.GetComponent<TileScript>().GetTower().GetComponentInChildren<ArtilleryScript>().DestroyTarget();
+                    selectedTile.GetComponent<TileScript>().UpgradeTower();
+                    selectedArty = selectedTile.GetComponent<TileScript>().GetTower().GetComponentInChildren<ArtilleryScript>().gameObject;
+                    AddMoneyAmount(-tower.GetComponentInChildren<ArtilleryScript>().GetCost());
                 }
                 break;
         }
@@ -208,7 +242,6 @@ public class PlayerController : MonoBehaviour
     {
         return IsPointerOverUIElement(GetEventSystemRaycastResults());
     }
-
 
     private bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
     {
@@ -265,6 +298,42 @@ public class PlayerController : MonoBehaviour
                 towerFireRateLabel.text = "Firerate:" + towerScript2.GetFireRate();
                 towerLevelLabel.text = "Tower: " + towerScript2.GetTowerLevel();
                 towerRangeLabel.text = "Range: " + towerScript2.GetRange();
+                break;
+
+            case "Railgun":
+                var towerScript3 = tower.GetComponentInChildren<RailgunScript>();
+
+                towerNameLabel.text = "Railgun";
+
+                towerCostUpgradeLabel.text = "Cost Upgrade: " + towerScript3.GetCost();
+                towerDamageLabel.text = "Damage:  " + towerScript3.GetDamageOverride();
+                towerFireRateLabel.text = "Firerate:" + towerScript3.GetFireRate();
+                towerLevelLabel.text = "Tower: " + towerScript3.GetTowerLevel();
+                towerRangeLabel.text = "Range: " + towerScript3.GetRange();
+                break;
+
+            case "MissileLauncher":
+                var towerScript4 = tower.GetComponentInChildren<RocketLauncherScript>();
+
+                towerNameLabel.text = "Missile Launcher";
+
+                towerCostUpgradeLabel.text = "Cost Upgrade: " + towerScript4.GetCost();
+                towerDamageLabel.text = "Damage:  " + towerScript4.GetDamageOverride();
+                towerFireRateLabel.text = "Firerate:" + towerScript4.GetFireRate();
+                towerLevelLabel.text = "Tower: " + towerScript4.GetTowerLevel();
+                towerRangeLabel.text = "Range: " + towerScript4.GetRange();
+                break;
+
+            case "Artillery":
+                var towerScript5 = tower.GetComponentInChildren<ArtilleryScript>();
+
+                towerNameLabel.text = "Artillery";
+
+                towerCostUpgradeLabel.text = "Cost Upgrade: " + towerScript5.GetCost();
+                towerDamageLabel.text = "Damage:  " + towerScript5.GetDamageOverride();
+                towerFireRateLabel.text = "Firerate:" + towerScript5.GetFireRate();
+                towerLevelLabel.text = "Tower: " + towerScript5.GetTowerLevel();
+                towerRangeLabel.text = "Range: Whole Map";
                 break;
         }
     }

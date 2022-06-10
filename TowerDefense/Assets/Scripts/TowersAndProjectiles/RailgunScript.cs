@@ -20,9 +20,11 @@ public class RailgunScript : TowerScript
                 proj.GetComponent<ProjectileScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
                 proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
+
                 //create sound player
                 audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 1, true, 12);
-                audioPlayer.GetComponent<AudioSource>().volume = 0.25f;
+                audioPlayer.GetComponent<AudioSource>().volume = 0.3f;
+
 
                 //particles
                 muzzleFlash.GetComponent<ParticleSystem>().Play();
@@ -30,19 +32,21 @@ public class RailgunScript : TowerScript
                 try
                 {
 
-                    //direction vector3
+                    //direction vector
                     Vector3 dir = (enemiesInRadius[0].transform.position - proj.transform.position).normalized * 15f;
 
-                    //making projectile look towards enemy
+                    //look at enemy
                     proj.transform.LookAt(enemiesInRadius[0].transform);
 
-                    //rotation vectors
+                    //getting rotation vectors
                     Vector3 portDir = (enemiesInRadius[0].transform.position - rotatingPart.transform.position + new Vector3(0, -90, 0)).normalized;
                     Quaternion portRot = Quaternion.LookRotation(portDir);
 
-                    //applying force and rotation
+                    //applying rotation vectors
                     rotatingPart.transform.rotation = portRot * Quaternion.Euler(0, 90, -180);
-                    proj.GetComponent<Rigidbody>().AddForce(dir, ForceMode.Impulse);
+                    Debug.Log("rotated");
+                    //applying move force
+                    proj.GetComponent<Rigidbody>().AddForce(dir * 1.5f, ForceMode.Impulse);
                 }
                 catch (Exception)
                 {
