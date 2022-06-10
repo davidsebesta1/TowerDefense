@@ -22,7 +22,7 @@ public class ArtilleryScript : MonoBehaviour
     private bool canFire = false;
     private bool editMode = false;
 
-    private ObjectPooler op;
+    private ObjectPoolAdvanced op;
 
     private GameObject target;
 
@@ -31,7 +31,7 @@ public class ArtilleryScript : MonoBehaviour
     private void Start()
     {
         fireRate = 1 / fireRate;
-        op = FindObjectOfType<ObjectPooler>();
+        op = FindObjectOfType<ObjectPoolAdvanced>();
     }
 
     private IEnumerator FireCountdown()
@@ -42,7 +42,7 @@ public class ArtilleryScript : MonoBehaviour
             if (canFire && !editMode && target != null)
             {
                 //Getting projectile from queue
-                GameObject proj = op.GetArty();
+                GameObject proj = op.GetObject(projectile);
 
                 //create sound player
                // audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 1, true, 10);

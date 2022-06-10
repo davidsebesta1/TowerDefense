@@ -10,12 +10,12 @@ public class SpawnManager : MonoBehaviour
     private bool isGameActive = false;
     private int wave = 0;
 
-    private ObjectPooler op;
+    private ObjectPoolAdvanced op;
 
     public void StartGame()
     {
         isGameActive = true;
-        op = FindObjectOfType<ObjectPooler>();
+        op = FindObjectOfType<ObjectPoolAdvanced>();
         StartCoroutine(SpawnNextWave());
         StartCoroutine(AutomaticNextWaveCounter());
     }
@@ -38,24 +38,24 @@ public class SpawnManager : MonoBehaviour
             {
 
                 //speedy
-                GameObject enemy = op.GetEnemySpeed();
-                enemy.GetComponent<EnemySpeedScript>().Spawn();
+                GameObject enemy = op.GetObject(enemies[1]);
+                enemy.GetComponent<EnemyScript>().Spawn();
                 enemy.transform.SetPositionAndRotation(spawnPoint.transform.position, enemies[1].transform.rotation);
                 i += 2;
             }
             else if (randomIndex == 2 && wave >= 20)
             {
                 //tank
-                GameObject enemy = op.GetEnemyTank();
-                enemy.GetComponent<EnemyTankScript>().Spawn();
+                GameObject enemy = op.GetObject(enemies[2]);
+                enemy.GetComponent<EnemyScript>().Spawn();
                 enemy.transform.SetPositionAndRotation(spawnPoint.transform.position, enemies[1].transform.rotation);
                 i += 3;
             }
             else
             {
                 //basic
-                GameObject enemy = op.GetEnemyBasic();
-                enemy.GetComponent<EnemyBasicScript>().Spawn();
+                GameObject enemy = op.GetObject(enemies[0]);
+                enemy.GetComponent<EnemyScript>().Spawn();
                 enemy.transform.SetPositionAndRotation(spawnPoint.transform.position, enemies[1].transform.rotation);
                 i++;
             }

@@ -28,7 +28,7 @@ public abstract class TowerScript : MonoBehaviour
 
     protected bool canFire = false;
 
-    protected ObjectPooler op;
+    protected ObjectPoolAdvanced op;
 
     protected GameObject audioPlayer;
 
@@ -36,7 +36,7 @@ public abstract class TowerScript : MonoBehaviour
     {
         fireRate = 1 / fireRate;
         gameObject.GetComponent<SphereCollider>().radius = range;
-        op = FindObjectOfType<ObjectPooler>();
+        op = FindObjectOfType<ObjectPoolAdvanced>();
         StartCoroutine(FireCountdown());
     }
 
@@ -108,7 +108,7 @@ public abstract class TowerScript : MonoBehaviour
                 muzzleFlash.GetComponent<ParticleSystem>().Play();
 
                 //projectile stuff
-                GameObject proj = op.GetProjectile();
+                GameObject proj = op.GetObject(projectile);
 
                 proj.transform.position = gameObject.transform.position;
                 proj.GetComponent<ProjectileScript>().Spawn();

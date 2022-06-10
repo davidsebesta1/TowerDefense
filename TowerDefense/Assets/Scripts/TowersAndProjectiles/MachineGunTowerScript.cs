@@ -20,7 +20,7 @@ public class MachineGunTowerScript : TowerScript
                     yield return new WaitForSeconds(0.1f);
 
                     //spawning projectile and changing stuff
-                    GameObject proj = op.GetProjectile();
+                    GameObject proj = op.GetObject(projectile);
                     proj.transform.position = gameObject.transform.position;
                     proj.GetComponent<ProjectileScript>().Spawn();
                     proj.GetComponent<Rigidbody>().velocity = Vector3.zero;

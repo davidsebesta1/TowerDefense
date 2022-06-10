@@ -4,25 +4,24 @@ using UnityEngine;
 
 public class EnemyScript : MonoBehaviour
 {
-    [SerializeField] protected float speedDefault;
-    [SerializeField] protected float healthDefault;
-    [SerializeField] protected int moneyValueDefault;
-    [SerializeField] protected bool doSpawnEnemies;
+    [SerializeField] private float speedDefault;
+    [SerializeField] private float healthDefault;
+    [SerializeField] private int moneyValueDefault;
+    [SerializeField] private bool doSpawnEnemies;
 
-    protected float speed;
-    protected float health;
-    protected int moneyValue;
+    private float speed;
+    private float health;
+    private int moneyValue;
 
+    private ObjectPoolAdvanced op;
 
-    protected ObjectPooler op;
-
-    protected void Start()
+    private void Start()
     {
         speed = speedDefault;
         health = healthDefault;
         moneyValue = moneyValueDefault;
 
-        op = FindObjectOfType<ObjectPooler>();
+        op = FindObjectOfType<ObjectPoolAdvanced>();
 
         if (doSpawnEnemies)
         {
@@ -37,7 +36,7 @@ public class EnemyScript : MonoBehaviour
         moneyValue = moneyValueDefault;
     }
 
-    protected void Update()
+    private void Update()
     {
         transform.Translate(-speed * Time.deltaTime * transform.forward);
     }
@@ -58,15 +57,15 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
-    protected virtual void OnDisable()
+    private void OnDisable()
     {
         if (op != null)
         {
-            op.ReturnEnemyBasic(this.gameObject);
+            op.ReturnGameObject(this.gameObject);
         }
     }
 
-    protected virtual IEnumerator SpawnEnemiesCoroutine()
+    private IEnumerator SpawnEnemiesCoroutine()
     {
         while (doSpawnEnemies)
         {

@@ -5,16 +5,16 @@ using UnityEngine;
 public class ProjectileScript : MonoBehaviour
 {
     [SerializeField] private float damage;
-    [SerializeField] private ParticleSystem impactParticlesRock;
-    [SerializeField] private ParticleSystem impactParticlesDirt;
+    [SerializeField] private GameObject impactParticlesRock;
+    [SerializeField] private GameObject impactParticlesDirt;
 
-    private ObjectPooler op;
+    private ObjectPoolAdvanced op;
 
     private GameObject audioPlayer;
 
     private void Start()
     {
-        this.op = FindObjectOfType<ObjectPooler>();
+        this.op = FindObjectOfType<ObjectPoolAdvanced>();
     }
 
     public void Spawn()
@@ -34,8 +34,9 @@ public class ProjectileScript : MonoBehaviour
         if (other.gameObject.CompareTag("Path") || other.gameObject.CompareTag("Rock"))
         {
             //impact particle
-            ParticleSystem explosion = Instantiate(impactParticlesRock, transform.position + new Vector3(0, 0.1f, 0), Quaternion.Euler(-90, 0, 0));
-            explosion.GetComponent<ParticleSystem>().Play();
+            GameObject explosion = op.GetObject(impactParticlesRock);
+            explosion.transform.SetPositionAndRotation(transform.position + new Vector3(0, 0.1f, 0), Quaternion.Euler(-90, 0, 0));
+            explosion.GetComponentInChildren<ParticleSystem>().Play();
 
             //create sound player
             audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 4, true, 10);
@@ -48,8 +49,9 @@ public class ProjectileScript : MonoBehaviour
         if(other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("Tile")){
 
             //impact particle
-            ParticleSystem explosion = Instantiate(impactParticlesDirt, transform.position + new Vector3(0, 0.1f, 0), Quaternion.Euler(-90, 0, 0));
-            explosion.GetComponent<ParticleSystem>().Play();
+            GameObject explosion = op.GetObject(impactParticlesDirt);
+            explosion.transform.SetPositionAndRotation(transform.position + new Vector3(0, 0.1f, 0), Quaternion.Euler(-90, 0, 0));
+            explosion.GetComponentInChildren<ParticleSystem>().Play();
 
             //create sound player
             audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 3, true, 10);
@@ -68,7 +70,7 @@ public class ProjectileScript : MonoBehaviour
     {
         if(op != null)
         {
-            op.ReturnProjectile(this.gameObject);
+            op.ReturnGameObject(this.gameObject);
         }
     }
 

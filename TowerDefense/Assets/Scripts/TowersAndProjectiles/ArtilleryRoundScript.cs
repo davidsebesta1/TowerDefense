@@ -7,7 +7,7 @@ public class ArtilleryRoundScript : MonoBehaviour
     [SerializeField] private float damage;
     [SerializeField] private ParticleSystem impactParticles;
 
-    private ObjectPooler op;
+    private ObjectPoolAdvanced op;
     private Rigidbody rb;
     private GameObject target;
 
@@ -15,7 +15,7 @@ public class ArtilleryRoundScript : MonoBehaviour
 
     private void Start()
     {
-        op = FindObjectOfType<ObjectPooler>();
+        op = FindObjectOfType<ObjectPoolAdvanced>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -85,7 +85,7 @@ public class ArtilleryRoundScript : MonoBehaviour
     {
         if (op != null)
         {
-            op.ReturnArty(this.gameObject);
+            op.ReturnGameObject(this.gameObject);
         }
     }
 

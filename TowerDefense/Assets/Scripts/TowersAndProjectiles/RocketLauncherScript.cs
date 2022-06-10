@@ -18,7 +18,7 @@ public class RocketLauncherScript : TowerScript
                 for (int i = 0; i < fireAmount; i++)
                 {
                     yield return new WaitForSeconds(0.25f);
-                    GameObject proj = op.GetRocket();
+                    GameObject proj = op.GetObject(projectile);
 
                     proj.transform.position = gameObject.transform.position;
                     proj.GetComponent<RocketScript>().Spawn();

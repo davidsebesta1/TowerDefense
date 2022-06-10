@@ -5,18 +5,18 @@ using UnityEngine;
 public class RocketScript : MonoBehaviour
 {
     [SerializeField] private float damage;
-    [SerializeField] private ParticleSystem impactParticles;
+    [SerializeField] private GameObject impactParticles;
 
     private GameObject target;
     private GameObject audioPlayer;
-    private ObjectPooler op;
+    private ObjectPoolAdvanced op;
 
     private Rigidbody rb;
 
 
     private void Start()
     {
-        this.op = FindObjectOfType<ObjectPooler>();
+        this.op = FindObjectOfType<ObjectPoolAdvanced>();
         this.rb = gameObject.GetComponent<Rigidbody>();
     }
 
@@ -44,7 +44,9 @@ public class RocketScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            ParticleSystem explosion = Instantiate(impactParticles, transform.position + new Vector3(0, 0.1f, 0), Quaternion.Euler(-90, 0, 0));
+            GameObject explosion = op.GetObject(impactParticles);
+            explosion.transform.SetPositionAndRotation(transform.position + new Vector3(0, 0.1f, 0), Quaternion.Euler(-90, 0, 0));
+            explosion.GetComponentInChildren<ParticleSystem>().Play();
             explosion.GetComponent<ParticleSystem>().Play();
 
             audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 8, true, 10);
@@ -79,7 +81,7 @@ public class RocketScript : MonoBehaviour
     {
         if (op != null)
         {
-            op.ReturnRocket(this.gameObject);
+            op.ReturnGameObject(this.gameObject);
         }
     }
 

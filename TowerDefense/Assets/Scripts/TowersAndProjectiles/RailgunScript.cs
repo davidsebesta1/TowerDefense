@@ -14,7 +14,7 @@ public class RailgunScript : TowerScript
             GetGameObjectsInRadius();
             if (canFire)
             {
-                GameObject proj = op.GetProjectile();
+                GameObject proj = op.GetObject(projectile);
                 proj.transform.position = gameObject.transform.position;
                 proj.GetComponent<ProjectileScript>().Spawn();
                 proj.GetComponent<ProjectileScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
