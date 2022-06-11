@@ -34,7 +34,7 @@ public class RocketScript : MonoBehaviour
             rb.AddForce(dir, ForceMode.Impulse);
         } else
         {
-            Vector3 dir = 5f * Time.deltaTime * transform.forward.normalized;
+            Vector3 dir = 5f * Time.deltaTime * Vector3.forward.normalized;
             rb.AddForce(dir, ForceMode.Impulse);
         }
     } 

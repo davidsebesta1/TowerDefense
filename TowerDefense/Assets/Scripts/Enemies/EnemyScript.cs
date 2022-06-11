@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class EnemyScript : MonoBehaviour
 {
+    [Header("Main")]
     [SerializeField] private float speedDefault;
     [SerializeField] private float healthDefault;
     [SerializeField] private int moneyValueDefault;
+
+    [Header("Spawning Properties")]
     [SerializeField] private bool doSpawnEnemies;
+    [SerializeField] private GameObject enemyToSpawn;
+    [SerializeField] private float minSpawnTime = 1f;
+    [SerializeField] private float maxSpawnTime = 5f;
+    [SerializeField] private Vector3 spawnOffset;
 
     private float speed;
     private float health;
@@ -38,7 +45,7 @@ public class EnemyScript : MonoBehaviour
 
     private void Update()
     {
-        transform.Translate(-speed * Time.deltaTime * transform.forward);
+        transform.Translate(speed * Time.deltaTime * Vector3.forward);
     }
 
     public float GetHealth()
@@ -50,9 +57,14 @@ public class EnemyScript : MonoBehaviour
     {
         health -= removeAmount;
 
-        if(health <= 0)
+        if (health <= 0)
         {
             GameObject.FindGameObjectWithTag("MainCamera").GetComponent<PlayerController>().AddMoneyAmount(moneyValue);
+
+            if(this.gameObject.name == "TheTon")
+            {
+                GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>().WinGame();
+            }
             this.gameObject.SetActive(false);
         }
     }
@@ -69,8 +81,10 @@ public class EnemyScript : MonoBehaviour
     {
         while (doSpawnEnemies)
         {
-            yield return new WaitForSeconds(Random.Range(5, 10));
-
+            yield return new WaitForSeconds(Random.Range(minSpawnTime, maxSpawnTime));
+            var en = op.GetObject(enemyToSpawn);
+            en.GetComponent<EnemyScript>().Spawn();
+            en.transform.SetPositionAndRotation(transform.position + spawnOffset, transform.rotation);
         }
     }
 }

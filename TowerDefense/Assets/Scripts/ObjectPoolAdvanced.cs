@@ -27,9 +27,9 @@ public class ObjectPoolAdvanced : MonoBehaviour
 
     public GameObject CreateNewObject(GameObject gameObject)
     {
-        GameObject newObject = Instantiate(gameObject);
-        newObject.name = gameObject.name;
-        return newObject;
+        GameObject _newObject = Instantiate(gameObject);
+        _newObject.name = gameObject.name;
+        return _newObject;
     }
 
     public void ReturnGameObject(GameObject gameObject)

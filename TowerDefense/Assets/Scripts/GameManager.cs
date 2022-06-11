@@ -45,6 +45,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void WinGame()
+    {
+        isGameActive = false;
+
+        spawnManager.GetComponent<SpawnManager>().EndGame();
+        player.GetComponent<PlayerController>().WinGame();
+
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            if (enemies[i] != null)
+            {
+                enemies[i].SetActive(false);
+            }
+        }
+    }
+
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);

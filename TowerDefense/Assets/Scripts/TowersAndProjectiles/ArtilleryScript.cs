@@ -45,8 +45,8 @@ public class ArtilleryScript : MonoBehaviour
                 GameObject proj = op.GetObject(projectile);
 
                 //create sound player
-               // audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 1, true, 10);
-               // audioPlayer.GetComponent<AudioSource>().volume = 0.2f + UnityEngine.Random.Range(-0.1f, 0.1f);
+                audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 7, true, 10);
+                audioPlayer.GetComponent<AudioSource>().volume = 0.15f + UnityEngine.Random.Range(-0.1f, 0.1f);
 
                 //particles
                 muzzleFlash.GetComponent<ParticleSystem>().Play();
@@ -90,8 +90,6 @@ public class ArtilleryScript : MonoBehaviour
         Vector3 portDir = (target.transform.position - rotatingPart.transform.position + new Vector3(0, 90, 0)).normalized;
         Quaternion portRot = Quaternion.LookRotation(portDir);
 
-
-        Debug.Log(portRot * Quaternion.Euler(-65, 0, 0));
         //applying rotation
         rotatingPart.transform.rotation = portRot * Quaternion.Euler(-65, 0, 0);
         StartCoroutine(FireCountdown());

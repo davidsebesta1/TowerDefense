@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class TileScript : MonoBehaviour
 {
+    [Header("Blueprint Prefabs")]
     [SerializeField] private GameObject[] towerTemplates;
-    [SerializeField] private GameObject[] towerObjects;
 
+    [Header("Tower Prefabs")]
     [SerializeField] private GameObject[] cannonBasicPrefabs;
     [SerializeField] private GameObject[] minigunPrefabs;
     [SerializeField] private GameObject[] railgunPrefabs;

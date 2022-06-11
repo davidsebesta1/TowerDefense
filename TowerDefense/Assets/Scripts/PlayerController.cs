@@ -8,12 +8,15 @@ using UnityEngine.EventSystems;
 public class PlayerController : MonoBehaviour
 {
     //Serialized Variables
+    [Header("Property")]
     [SerializeField] private float speed;
 
+    [Header("UI Elements")]
     [SerializeField] private CanvasRenderer BuildPanel;
     [SerializeField] private CanvasRenderer UpgradeMenu;
     [SerializeField] private Button startButton;
     [SerializeField] private Button restartButton;
+    [SerializeField] private Button winButton;
     [SerializeField] private Button artyTargetButton;
 
     [SerializeField] private TextMeshProUGUI towerNameLabel;
@@ -23,6 +26,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI towerFireRateLabel;
     [SerializeField] private TextMeshProUGUI towerRangeLabel;
 
+    [Header("Else")]
     [SerializeField] private GameObject artyTargetPrefab;
 
     //Rigidbody
@@ -51,7 +55,8 @@ public class PlayerController : MonoBehaviour
     private bool upgradeMenuOpen = false;
 
     //Creative mode bool
-    private readonly bool creativeMode = true;
+    [Header("Creative Mode")]
+    [SerializeField] private bool creativeMode = false;
 
     private void Start()
     {
@@ -76,6 +81,14 @@ public class PlayerController : MonoBehaviour
         verticalInput = 0f;
         horizontalInput = 0f;
         restartButton.gameObject.SetActive(true);
+    }
+
+    public void WinGame()
+    {
+        isGameActive = false;
+        verticalInput = 0f;
+        horizontalInput = 0f;
+        winButton.gameObject.SetActive(true);
     }
 
     private void Update()
@@ -119,7 +132,7 @@ public class PlayerController : MonoBehaviour
                                 upgradeMenuOpen = false;
                                 UpgradeMenu.gameObject.SetActive(false);
 
-                                if (GameObj.GetComponent<TileScript>().GetTower().gameObject.CompareTag("Artillery"))
+                                if (GameObj.GetComponent<TileScript>().GetTower().CompareTag("Artillery"))
                                 {
                                     selectedArty = null;
                                     SetArtySelectionMode(false);
@@ -284,7 +297,7 @@ public class PlayerController : MonoBehaviour
                 towerCostUpgradeLabel.text = "Cost Upgrade: " + towerScript.GetCost();
                 towerDamageLabel.text = "Damage:  " + towerScript.GetDamageOverride();
                 towerFireRateLabel.text = "Firerate:" + towerScript.GetFireRate();
-                towerLevelLabel.text = "Tower: " + towerScript.GetTowerLevel();
+                towerLevelLabel.text = "Tower Level: " + towerScript.GetTowerLevel();
                 towerRangeLabel.text = "Range: " + towerScript.GetRange();
                 break;
 
@@ -296,7 +309,7 @@ public class PlayerController : MonoBehaviour
                 towerCostUpgradeLabel.text = "Cost Upgrade: " + towerScript2.GetCost();
                 towerDamageLabel.text = "Damage:  " + towerScript2.GetDamageOverride();
                 towerFireRateLabel.text = "Firerate:" + towerScript2.GetFireRate();
-                towerLevelLabel.text = "Tower: " + towerScript2.GetTowerLevel();
+                towerLevelLabel.text = "Tower Level: " + towerScript2.GetTowerLevel();
                 towerRangeLabel.text = "Range: " + towerScript2.GetRange();
                 break;
 
@@ -308,7 +321,7 @@ public class PlayerController : MonoBehaviour
                 towerCostUpgradeLabel.text = "Cost Upgrade: " + towerScript3.GetCost();
                 towerDamageLabel.text = "Damage:  " + towerScript3.GetDamageOverride();
                 towerFireRateLabel.text = "Firerate:" + towerScript3.GetFireRate();
-                towerLevelLabel.text = "Tower: " + towerScript3.GetTowerLevel();
+                towerLevelLabel.text = "Tower Level: " + towerScript3.GetTowerLevel();
                 towerRangeLabel.text = "Range: " + towerScript3.GetRange();
                 break;
 
@@ -320,7 +333,7 @@ public class PlayerController : MonoBehaviour
                 towerCostUpgradeLabel.text = "Cost Upgrade: " + towerScript4.GetCost();
                 towerDamageLabel.text = "Damage:  " + towerScript4.GetDamageOverride();
                 towerFireRateLabel.text = "Firerate:" + towerScript4.GetFireRate();
-                towerLevelLabel.text = "Tower: " + towerScript4.GetTowerLevel();
+                towerLevelLabel.text = "Tower Level: " + towerScript4.GetTowerLevel();
                 towerRangeLabel.text = "Range: " + towerScript4.GetRange();
                 break;
 
@@ -332,7 +345,7 @@ public class PlayerController : MonoBehaviour
                 towerCostUpgradeLabel.text = "Cost Upgrade: " + towerScript5.GetCost();
                 towerDamageLabel.text = "Damage:  " + towerScript5.GetDamageOverride();
                 towerFireRateLabel.text = "Firerate:" + towerScript5.GetFireRate();
-                towerLevelLabel.text = "Tower: " + towerScript5.GetTowerLevel();
+                towerLevelLabel.text = "Tower Level: " + towerScript5.GetTowerLevel();
                 towerRangeLabel.text = "Range: Whole Map";
                 break;
         }
