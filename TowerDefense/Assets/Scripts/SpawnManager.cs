@@ -8,7 +8,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject[] enemies;
 
     private bool isGameActive = false;
-    private int wave = 100;
+    private int wave = 0;
 
     private bool spawningInProgress = false;
 

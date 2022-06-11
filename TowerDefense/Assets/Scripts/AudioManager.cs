@@ -9,6 +9,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private GameObject audioPlayer;
     [SerializeField] private Queue<GameObject> audioPool = new();
 
+    private int playingAudios = 0;
+
     private void Start()
     {
         for(int i = 0; i < 20; i++)
@@ -16,6 +18,8 @@ public class AudioManager : MonoBehaviour
             GameObject audioPlr = Instantiate(audioPlayer);
             audioPool.Enqueue(audioPlr);
             audioPlr.SetActive(false);
+
+            StartCoroutine(CountCurrentlyActivePlayers());
         }
     }
 
@@ -57,5 +61,27 @@ public class AudioManager : MonoBehaviour
         yield return new WaitForSeconds(lenght);
         audioPlayer.SetActive(false);
         audioPool.Enqueue(audioPlayer);
+    }
+
+    private IEnumerator CountCurrentlyActivePlayers()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.1f);
+            GameObject[] audios = GameObject.FindGameObjectsWithTag("AudioPlayer");
+            playingAudios = 0;
+            for(int i = 0; i < audios.Length; i++)
+            {
+                if (audios[i].active == true)
+                {
+                    playingAudios++;
+                }
+            }
+        }
+    }
+    
+    public int CurrentlyPlayingAudios()
+    {
+        return playingAudios;
     }
 }

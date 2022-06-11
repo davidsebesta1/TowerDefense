@@ -27,12 +27,19 @@ public class RocketLauncherScript : TowerScript
                     proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
                     //create sound player
-                    int rnd = UnityEngine.Random.Range(6,8);
-                    audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, rnd, true, 10);
-                    audioPlayer.GetComponent<AudioSource>().volume = 0.2f + UnityEngine.Random.Range(-0.1f, 0.1f);
+                    int rnd = UnityEngine.Random.Range(6, 8);
+
+                    if (au.CurrentlyPlayingAudios() <= 30)
+                    {
+                        audioPlayer = au.SpawnClipPlayer(transform.position, Quaternion.identity, rnd, true, 10);
+                        audioPlayer.GetComponent<AudioSource>().volume = 0.2f + UnityEngine.Random.Range(-0.1f, 0.1f);
+                    }
 
                     //particles
-                    muzzleFlash.GetComponent<ParticleSystem>().Play();
+                    if (i % 2 == 0)
+                    {
+                        muzzleFlash.GetComponent<ParticleSystem>().Play();
+                    }
 
                     try
                     {

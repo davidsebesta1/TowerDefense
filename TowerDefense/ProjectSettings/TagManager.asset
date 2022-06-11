@@ -19,6 +19,7 @@ TagManager:
   - Minigun
   - Railgun
   - MissileLauncher
+  - AudioPlayer
   layers:
   - Default
   - TransparentFX

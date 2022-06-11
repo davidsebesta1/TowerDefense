@@ -13,11 +13,13 @@ public class RocketScript : MonoBehaviour
 
     private Rigidbody rb;
 
+    private AudioManager au;
 
     private void Start()
     {
         this.op = FindObjectOfType<ObjectPoolAdvanced>();
         this.rb = gameObject.GetComponent<Rigidbody>();
+        this.au = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
     public void Spawn()
@@ -34,7 +36,7 @@ public class RocketScript : MonoBehaviour
             rb.AddForce(dir, ForceMode.Impulse);
         } else
         {
-            Vector3 dir = 5f * Time.deltaTime * Vector3.forward.normalized;
+            Vector3 dir = 5f * Time.deltaTime * Vector3.forward;
             rb.AddForce(dir, ForceMode.Impulse);
         }
     } 
@@ -47,10 +49,12 @@ public class RocketScript : MonoBehaviour
             GameObject explosion = op.GetObject(impactParticles);
             explosion.transform.SetPositionAndRotation(transform.position + new Vector3(0, 0.1f, 0), Quaternion.Euler(-90, 0, 0));
             explosion.GetComponentInChildren<ParticleSystem>().Play();
-            explosion.GetComponent<ParticleSystem>().Play();
 
-            audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 8, true, 10);
-            audioPlayer.GetComponent<AudioSource>().volume = 0.2f + UnityEngine.Random.Range(-0.1f, 0.1f);
+            if (au.CurrentlyPlayingAudios() <= 35)
+            {
+                audioPlayer = au.SpawnClipPlayer(transform.position, Quaternion.identity, 8, true, 10);
+                audioPlayer.GetComponent<AudioSource>().volume = 0.2f + Random.Range(-0.1f, 0.1f);
+            }
 
             Collider[] collided = Physics.OverlapSphere(transform.position, 0.5f);
 
@@ -81,6 +85,7 @@ public class RocketScript : MonoBehaviour
     {
         if (op != null)
         {
+            StopCoroutine(DestroyTimer());
             op.ReturnGameObject(this.gameObject);
         }
     }

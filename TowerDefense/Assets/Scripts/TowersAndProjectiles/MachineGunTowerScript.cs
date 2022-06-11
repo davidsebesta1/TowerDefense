@@ -15,23 +15,24 @@ public class MachineGunTowerScript : TowerScript
             GetGameObjectsInRadius();
             if (canFire)
             {
+
                 for (int i = 0; i < fireCycleAmount; i++)
                 {
-                    yield return new WaitForSeconds(0.1f);
+                    yield return new WaitForSeconds(0.05f);
 
                     //spawning projectile and changing stuff
                     GameObject proj = op.GetObject(projectile);
-                    proj.transform.position = gameObject.transform.position;
+                    proj.transform.position = muzzleFlash.transform.position;
                     proj.GetComponent<ProjectileScript>().Spawn();
                     proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
                     proj.GetComponent<ProjectileScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
 
                     //create sound player
-                    audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 2, true, 10);
-                    audioPlayer.GetComponent<AudioSource>().volume = 0.2f + UnityEngine.Random.Range(-0.1f, 0.1f);
-
-                    //particles
-                    muzzleFlash.GetComponent<ParticleSystem>().Play();
+                    if (au.CurrentlyPlayingAudios() <= 25)
+                    {
+                        audioPlayer = au.SpawnClipPlayer(transform.position, Quaternion.identity, 2, true, 10);
+                        audioPlayer.GetComponent<AudioSource>().volume = 0.2f + UnityEngine.Random.Range(-0.1f, 0.1f);
+                    }
 
                     //direction vector 3
                     try
@@ -60,6 +61,9 @@ public class MachineGunTowerScript : TowerScript
                         }
                     }
                 }
+
+                //particles
+                muzzleFlash.GetComponent<ParticleSystem>().Play();
             }
         }
     }

@@ -32,12 +32,15 @@ public abstract class TowerScript : MonoBehaviour
 
     protected GameObject audioPlayer;
 
+    protected AudioManager au;
+
     protected void Start()
     {
         fireRate = 1 / fireRate;
         gameObject.GetComponent<SphereCollider>().radius = range;
         op = FindObjectOfType<ObjectPoolAdvanced>();
         StartCoroutine(FireCountdown());
+        au = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
     protected void GetGameObjectsInRadius()
@@ -101,8 +104,11 @@ public abstract class TowerScript : MonoBehaviour
             if (canFire)
             {
                 //audio
-                audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 5, true, 10);
-                audioPlayer.GetComponent<AudioSource>().volume = 0.15f + UnityEngine.Random.Range(-0.1f, 0.1f);
+                if (au.CurrentlyPlayingAudios() <= 30)
+                {
+                    audioPlayer = au.SpawnClipPlayer(transform.position, Quaternion.identity, 5, true, 10);
+                    audioPlayer.GetComponent<AudioSource>().volume = 0.15f + UnityEngine.Random.Range(-0.1f, 0.1f);
+                }
 
                 //particles
                 muzzleFlash.GetComponent<ParticleSystem>().Play();
@@ -110,7 +116,7 @@ public abstract class TowerScript : MonoBehaviour
                 //projectile stuff
                 GameObject proj = op.GetObject(projectile);
 
-                proj.transform.position = gameObject.transform.position;
+                proj.transform.position = muzzleFlash.transform.position;
                 proj.GetComponent<ProjectileScript>().Spawn();
                 proj.GetComponent<ProjectileScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
                 proj.GetComponent<Rigidbody>().velocity = Vector3.zero;

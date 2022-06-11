@@ -12,9 +12,12 @@ public class ProjectileScript : MonoBehaviour
 
     private GameObject audioPlayer;
 
+    private AudioManager au;
+
     private void Start()
     {
         this.op = FindObjectOfType<ObjectPoolAdvanced>();
+        this.au = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
     public void Spawn()
@@ -39,11 +42,13 @@ public class ProjectileScript : MonoBehaviour
             explosion.GetComponentInChildren<ParticleSystem>().Play();
 
             //create sound player
-            audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 4, true, 10);
-            audioPlayer.GetComponent<AudioSource>().volume = 0.1f;
+            if (au.CurrentlyPlayingAudios() <= 25)
+            {
+                audioPlayer = au.SpawnClipPlayer(transform.position, Quaternion.identity, 4, true, 10);
+                audioPlayer.GetComponent<AudioSource>().volume = 0.1f;
+            }
 
             this.gameObject.SetActive(false);
-
         }
 
         if(other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("Tile")){
@@ -54,8 +59,11 @@ public class ProjectileScript : MonoBehaviour
             explosion.GetComponentInChildren<ParticleSystem>().Play();
 
             //create sound player
-            audioPlayer = GameObject.Find("AudioManager").GetComponent<AudioManager>().SpawnClipPlayer(transform.position, Quaternion.identity, 3, true, 10);
-            audioPlayer.GetComponent<AudioSource>().volume = 0.1f;
+            if(au.CurrentlyPlayingAudios() <= 25)
+            {
+                audioPlayer = au.SpawnClipPlayer(transform.position, Quaternion.identity, 3, true, 10);
+                audioPlayer.GetComponent<AudioSource>().volume = 0.1f;
+            }
 
             this.gameObject.SetActive(false);
         }
@@ -70,6 +78,7 @@ public class ProjectileScript : MonoBehaviour
     {
         if(op != null)
         {
+            StopCoroutine(DestroyTimer());
             op.ReturnGameObject(this.gameObject);
         }
     }
