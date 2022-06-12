@@ -122,7 +122,7 @@ public abstract class TowerScript : MonoBehaviour
                 proj.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
                 //direction vector3
-                Vector3 dir = -0.25f * enemiesInRadius[0].transform.forward + 10f * (enemiesInRadius[0].transform.position - proj.transform.position).normalized;
+                Vector3 dir = enemiesInRadius[0].transform.forward + 10f * (enemiesInRadius[0].transform.position - proj.transform.position).normalized;
 
                 //making projectile look towards enemy
                 proj.transform.LookAt(enemiesInRadius[0].transform);

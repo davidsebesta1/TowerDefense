@@ -69,26 +69,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void StartGame()
+    private void Awake()
     {
-        isGameActive = true;
-        startButton.gameObject.SetActive(false);
-    }
-
-    public void EndGame()
-    {
-        isGameActive = false;
-        verticalInput = 0f;
-        horizontalInput = 0f;
-        restartButton.gameObject.SetActive(true);
-    }
-
-    public void WinGame()
-    {
-        isGameActive = false;
-        verticalInput = 0f;
-        horizontalInput = 0f;
-        winButton.gameObject.SetActive(true);
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = Screen.currentResolution.refreshRate;
     }
 
     private void Update()
@@ -181,25 +165,55 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (gameObject.transform.position.x > 20f)
+        var pos = gameObject.transform.position;
+
+        if (pos.x > 20f)
         {
-            horizontalInput += -1.5f;
+            horizontalInput -= 1.5f;
         }
 
-        if (gameObject.transform.position.x < 0f)
+        if (pos.x < 0f)
         {
             horizontalInput += 1.5f;
         }
 
-        if (gameObject.transform.position.z > 25f)
+        if (pos.z > 25f)
         {
-            verticalInput += -1.5f;
+            verticalInput -= 1.5f;
         }
 
-        if (gameObject.transform.position.z < 0f)
+        if (pos.z < 0f)
         {
             verticalInput += 1.5f;
         }
+    }
+
+    private void LateUpdate()
+    {
+        Vector3 dir = speed * Time.deltaTime * new Vector3(horizontalInput, 0, verticalInput);
+        rb.AddForce(dir, ForceMode.Impulse);
+    }
+
+    public void StartGame()
+    {
+        isGameActive = true;
+        startButton.gameObject.SetActive(false);
+    }
+
+    public void EndGame()
+    {
+        isGameActive = false;
+        verticalInput = 0f;
+        horizontalInput = 0f;
+        restartButton.gameObject.SetActive(true);
+    }
+
+    public void WinGame()
+    {
+        isGameActive = false;
+        verticalInput = 0f;
+        horizontalInput = 0f;
+        winButton.gameObject.SetActive(true);
     }
 
     public void UpgradeSelectedTower()
@@ -276,13 +290,6 @@ public class PlayerController : MonoBehaviour
         List<RaycastResult> raysastResults = new();
         EventSystem.current.RaycastAll(eventData, raysastResults);
         return raysastResults;
-    }
-
-
-    private void LateUpdate()
-    {
-        Vector3 dir = speed * Time.deltaTime * new Vector3(horizontalInput, 0, verticalInput);
-        rb.AddForce(dir, ForceMode.Impulse);
     }
 
     private void UpdateUpgradeMenuText(GameObject tower)

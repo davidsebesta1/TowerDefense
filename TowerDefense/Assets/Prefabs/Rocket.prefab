@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 670344840418026574}
   - component: {fileID: 8856709236765707314}
   - component: {fileID: 4459708395376220638}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Rocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,12 +138,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 4585682898502560}
     m_Modifications:
     - target: {fileID: 100000, guid: 9fdb9361d90a0c64688ffb3004e8682c, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 9fdb9361d90a0c64688ffb3004e8682c, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 126
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 9fdb9361d90a0c64688ffb3004e8682c, type: 3}
       propertyPath: m_Name
       value: WFX_Fire SmallFlame (No Smoke)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 9fdb9361d90a0c64688ffb3004e8682c, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 9fdb9361d90a0c64688ffb3004e8682c, type: 3}
       propertyPath: m_StaticEditorFlags

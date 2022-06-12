@@ -72,7 +72,7 @@ public class AudioManager : MonoBehaviour
             playingAudios = 0;
             for(int i = 0; i < audios.Length; i++)
             {
-                if (audios[i].active == true)
+                if (audios[i].activeSelf == true)
                 {
                     playingAudios++;
                 }

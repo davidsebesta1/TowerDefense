@@ -27,9 +27,9 @@ TagManager:
   - Enemy
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Tile
+  - Projectile
+  - Path
   - 
   - 
   - 

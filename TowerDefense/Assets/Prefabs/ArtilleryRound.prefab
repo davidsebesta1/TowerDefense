@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8708568585336044977}
   - component: {fileID: 8100834099531766627}
   - component: {fileID: 8177210473577148502}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: ArtilleryRound
   m_TagString: Artillery
   m_Icon: {fileID: 0}

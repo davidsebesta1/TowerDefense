@@ -14,7 +14,7 @@ public class RailgunScript : TowerScript
             GetGameObjectsInRadius();
             if (canFire)
             {
-                GameObject proj = op.GetObject(projectile);
+                var proj = op.GetObject(projectile);
                 proj.transform.position = muzzleFlash.transform.position;
                 proj.GetComponent<ProjectileScript>().Spawn();
                 proj.GetComponent<ProjectileScript>().SetDamage(damageOverride * towerTierDamageMultiplier);
@@ -35,7 +35,7 @@ public class RailgunScript : TowerScript
                 {
 
                     //direction vector
-                    Vector3 dir = (enemiesInRadius[0].transform.position - proj.transform.position).normalized * 15f;
+                    Vector3 dir = (enemiesInRadius[0].transform.position - proj.transform.position).normalized * 15f + enemiesInRadius[0].transform.forward;
 
                     //look at enemy
                     proj.transform.LookAt(enemiesInRadius[0].transform);

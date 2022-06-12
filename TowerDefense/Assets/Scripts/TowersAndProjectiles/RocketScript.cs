@@ -46,7 +46,7 @@ public class RocketScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            GameObject explosion = op.GetObject(impactParticles);
+            var explosion = op.GetObject(impactParticles);
             explosion.transform.SetPositionAndRotation(transform.position + new Vector3(0, 0.1f, 0), Quaternion.Euler(-90, 0, 0));
             explosion.GetComponentInChildren<ParticleSystem>().Play();
 

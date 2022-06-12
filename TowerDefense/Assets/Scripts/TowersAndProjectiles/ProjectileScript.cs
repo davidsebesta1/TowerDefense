@@ -42,7 +42,7 @@ public class ProjectileScript : MonoBehaviour
             explosion.GetComponentInChildren<ParticleSystem>().Play();
 
             //create sound player
-            if (au.CurrentlyPlayingAudios() <= 25)
+            if (au.CurrentlyPlayingAudios() <= 20)
             {
                 audioPlayer = au.SpawnClipPlayer(transform.position, Quaternion.identity, 4, true, 10);
                 audioPlayer.GetComponent<AudioSource>().volume = 0.1f;
@@ -59,7 +59,7 @@ public class ProjectileScript : MonoBehaviour
             explosion.GetComponentInChildren<ParticleSystem>().Play();
 
             //create sound player
-            if(au.CurrentlyPlayingAudios() <= 25)
+            if(au.CurrentlyPlayingAudios() <= 20)
             {
                 audioPlayer = au.SpawnClipPlayer(transform.position, Quaternion.identity, 3, true, 10);
                 audioPlayer.GetComponent<AudioSource>().volume = 0.1f;

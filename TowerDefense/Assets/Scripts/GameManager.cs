@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Text;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class GameManager : MonoBehaviour
 
     private int wallHealth = 100;
     private GameObject[] enemies;
+
+    private StringBuilder sb = new StringBuilder();
 
     public void StartGame()
     {
@@ -96,9 +99,12 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(0.1f);
 
-            moneyLabel.text = "Money: " + player.GetComponent<PlayerController>().GetMoneyAmount();
-            healthLabel.text = "Wall Health: " + wallHealth + "%";
-            waveLabel.text = "Wave: " + spawnManager.GetComponent<SpawnManager>().GetWaveNumber();
+            sb.Clear();
+            moneyLabel.text = sb.Append("Money: ").Append(player.GetComponent<PlayerController>().GetMoneyAmount()).ToString();
+            sb.Clear();
+            healthLabel.text = sb.Append("Wall Health: ").Append(wallHealth).Append("%").ToString();
+            sb.Clear();
+            waveLabel.text = sb.Append("Wave: ").Append(spawnManager.GetComponent<SpawnManager>().GetWaveNumber()).ToString();
         }
     }
 }
